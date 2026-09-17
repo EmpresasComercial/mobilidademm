@@ -115,13 +115,6 @@ export default function Home() {
                         backgroundPosition: s.bgPos,
                       }}
                     />
-                    <div className="text">
-                      <div className="category"><small>{s.category}</small></div>
-                      <p>{s.text}</p>
-                      <div className="button">
-                        <div data-button><span>{s.buttonText}</span></div>
-                      </div>
-                    </div>
                   </div>
                 ) : null
               )}
@@ -232,48 +225,13 @@ export default function Home() {
             </p>
           </div>
           <div className="list">
-            {[
-              {
-                icon: 'https://lmmobilidade.com.br/wp-content/uploads/2025/03/check-mark-32x32.png',
-                title: 'Soluções completas em mobilidade corporativa',
-                desc: 'Reduza custos, ganhe eficiência e mantenha sua operação rodando sem interrupções.',
-              },
-              {
-                icon: 'https://lmmobilidade.com.br/wp-content/uploads/2025/11/vista-frontal-de-carros-viajando-empilhados.png',
-                title: 'Gestão completa da frota da sua empresa',
-                desc: 'Controle total do desempenho da sua operação, com manutenção preventiva e substituição ágil de veículos.',
-              },
-              {
-                icon: 'https://lmmobilidade.com.br/wp-content/uploads/2025/03/piggy-bank-32x32.png',
-                title: 'Veículos disponíveis por assinatura',
-                desc: 'Tenha um carro novo sempre à mão, sem as preocupações e custos de compra e manutenção.',
-              },
-              {
-                icon: 'https://lmmobilidade.com.br/wp-content/uploads/2025/03/shield-32x32.png',
-                title: 'Venda de carros seminovos com qualidade garantida',
-                desc: 'Escolha veículos com procedência comprovada, revisados e prontos para rodar com segurança.',
-              },
-              {
-                icon: 'https://lmmobilidade.com.br/wp-content/uploads/2025/03/smartphone-32x32.png',
-                title: 'Veículos para aplicativos de transporte',
-                desc: 'Mais tempo na pista e menos paradas, com planos econômicos e manutenção inclusa para motoristas de app.',
-              },
-              {
-                icon: 'https://lmmobilidade.com.br/wp-content/uploads/2025/03/24-hours-support-32x32.png',
-                title: 'Suporte em todo o trajeto',
-                desc: 'Atendimento humano e ágil para garantir tranquilidade em cada quilômetro percorrido.',
-              },
-            ].map((b, i) => (
-              <div className="item" key={i}>
-                <div className="icon">
-                  <img src={b.icon} alt={b.title} width="32" height="32" className="img-responsive" />
-                </div>
-                <div className="text">
-                  <h3>{b.title}</h3>
-                  <p>{b.desc}</p>
-                </div>
-              </div>
-            ))}
+            {/* Simplified benefit paragraphs */}
+            <p style={{color:'#000', marginBottom:'12px', fontSize:'14px'}}>Soluções completas em mobilidade corporativa: Reduza custos, ganhe eficiência e mantenha sua operação rodando sem interrupções.</p>
+            <p style={{color:'#000', marginBottom:'12px', fontSize:'14px'}}>Gestão completa da frota da sua empresa: Controle total do desempenho da sua operação, com manutenção preventiva e substituição ágil de veículos.</p>
+            <p style={{color:'#000', marginBottom:'12px', fontSize:'14px'}}>Veículos disponíveis por assinatura: Tenha um carro novo sempre à mão, sem as preocupações e custos de compra e manutenção.</p>
+            <p style={{color:'#000', marginBottom:'12px', fontSize:'14px'}}>Venda de carros seminovos com qualidade garantida: Escolha veículos com procedência comprovada, revisados e prontos para rodar com segurança.</p>
+            <p style={{color:'#000', marginBottom:'12px', fontSize:'14px'}}>Veículos para aplicativos de transporte: Mais tempo na pista e menos paradas, com planos econômicos e manutenção inclusa para motoristas de app.</p>
+            <p style={{color:'#000', marginBottom:'12px', fontSize:'14px'}}>Suporte em todo o trajeto: Atendimento humano e ágil para garantir tranquilidade em cada quilômetro percorrido.</p>
           </div>
         </div>
       </section>

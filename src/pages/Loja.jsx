@@ -1,20 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
-  Car, 
-  ShieldCheck, 
-  Wrench, 
-  FileCheck, 
-  Clock, 
-  CheckCircle2, 
+  Check, 
+  X, 
+  MapPin, 
+  ChevronRight, 
   ChevronDown, 
   ChevronUp, 
-  MapPin, 
-  Phone, 
-  Sparkles,
-  Send,
-  X,
-  Search,
-  Check
+  Clock, 
+  Phone,
+  Shield,
+  HelpCircle,
+  FileText
 } from 'lucide-react';
 
 const VEICULOS_APPS = [
@@ -24,10 +20,7 @@ const VEICULOS_APPS = [
     nome: 'Kwid ou similares',
     preco: '690,00',
     imagem: 'https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2023/10/kwid-apps-1-330x205.png',
-    tipo: 'Econômico',
-    categoria: 'economicos',
-    obs: 'Ideal para quem busca economia máxima de combustível na cidade.',
-    destaques: ['Motor 1.0 Flex', 'Ar-condicionado', 'Direção Elétrica', 'Super Econômico']
+    obs: '*consulte disponibilidade'
   },
   {
     id: 'grupo-b',
@@ -35,10 +28,7 @@ const VEICULOS_APPS = [
     nome: 'HB20 Sense, Gol ou similares',
     preco: '710,00',
     imagem: 'https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2024/06/grupo-B-330x205.jpg',
-    tipo: 'Hatch Compacto',
-    categoria: 'economicos',
-    obs: 'Conforto e confiabilidade mecânica consagrada no dia a dia.',
-    destaques: ['Motor 1.0 Flex', 'Conectividade', 'Vidros Elétricos', 'Airbags']
+    obs: '*consulte disponibilidade'
   },
   {
     id: 'grupo-b-plus',
@@ -46,10 +36,7 @@ const VEICULOS_APPS = [
     nome: 'Argo Drive 1.0 ou similares',
     preco: '740,00',
     imagem: 'https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2024/08/fiat-argo-drive-1.0-330x205.png',
-    tipo: 'Hatch Moderno',
-    categoria: 'economicos',
-    obs: 'Mais espaço interno e central multimídia moderna para seus passageiros.',
-    destaques: ['Design Moderno', 'Espaço Amplo', 'Direção Elétrica', 'Econômico']
+    obs: '*consulte disponibilidade'
   },
   {
     id: 'grupo-f-polo',
@@ -57,10 +44,7 @@ const VEICULOS_APPS = [
     nome: 'Polo Track ou similares',
     preco: '772,00',
     imagem: 'https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2024/03/polo-track-330x205.png',
-    tipo: 'Hatch Premium',
-    categoria: 'economicos',
-    obs: 'Robustez e segurança alemã para rodar com tranquilidade absoluta.',
-    destaques: ['Controle de Estabilidade', 'Motor MPI', 'Excelente Desempenho', 'Conforto Superior']
+    obs: '*consulte disponibilidade'
   },
   {
     id: 'grupo-es',
@@ -68,21 +52,15 @@ const VEICULOS_APPS = [
     nome: 'Cronos Drive, HB20S, Onix Sedan ou similares',
     preco: '790,00',
     imagem: 'https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2024/06/Cronos-1.0-Drive-HB20S-Onix-Sedan-1.0-330x205.jpg',
-    tipo: 'Sedan Espaçoso',
-    categoria: 'sedans',
-    obs: 'Porta-malas gigante para aceitar viagens ao aeroporto e corridas premium.',
-    destaques: ['Porta-malas > 500L', 'Ar-condicionado Digital', 'Conforto Traseiro', 'Aceita Confort']
+    obs: '*consulte disponibilidade'
   },
   {
     id: 'grupo-f-auto',
-    grupo: 'Grupo F Automático',
+    grupo: 'Grupo F',
     nome: 'HB20 T-GDI Sense AT ou similares',
     preco: '810,00',
     imagem: 'https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2024/03/hb20-tgdi-sense-apps-330x205.png',
-    tipo: 'Turbo Automático',
-    categoria: 'automaticos',
-    obs: 'Câmbio automático e motor turbo para dirigir o dia todo sem cansaço.',
-    destaques: ['Câmbio Automático', 'Motor Turbo T-GDI', 'Menos Cansaço', 'Piloto Automático']
+    obs: '*consulte disponibilidade'
   },
   {
     id: 'grupo-s',
@@ -90,628 +68,665 @@ const VEICULOS_APPS = [
     nome: 'T-Cross, Nivus, Kicks, Tracker ou similares',
     preco: '1.328,00',
     imagem: 'https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2023/10/suv-apps-1-330x205.png',
-    tipo: 'SUV Premium',
-    categoria: 'suvs',
-    obs: 'Categoria SUV para atender Uber Black/Comfort e passageiros de alto padrão.',
-    destaques: ['SUV Completo', 'Posição Elevada', 'Máximo Status', 'Corridas de Alto Valor']
+    obs: '*consulte disponibilidade'
   }
 ];
 
-const DIFERENCIAIS = [
+const CONTROLE_ITEMS = [
   {
-    icon: <Car size={26} color="#e0a203" />,
-    title: 'Condições únicas para motorista de app',
-    text: 'Diversos planos e modelos sob medida para quem roda profissionalmente.'
+    num: '01',
+    title: 'Vários modelos disponíveis',
+    desc: 'Planos com diferentes modelos e cobertura que se adaptam ao seu uso.'
   },
   {
-    icon: <Sparkles size={26} color="#e0a203" />,
-    title: 'Melhor custo-benefício',
-    text: 'Preços justos por semana para maximizar o seu lucro líquido no mês.'
+    num: '02',
+    title: 'Planos acessíveis',
+    desc: 'Ótimo custo-benefício, ideais para quem quer começar ou ampliar a renda.'
   },
   {
-    icon: <Clock size={26} color="#e0a203" />,
-    title: 'Assistência 24 horas',
-    text: 'Tranquilidade a qualquer hora em todo o território nacional.'
+    num: '03',
+    title: 'Diversas unidades no Brasil',
+    desc: 'Atendimento em várias cidades, com retirada e devolução no mesmo local e suporte rápido.'
   },
   {
-    icon: <Wrench size={26} color="#e0a203" />,
-    title: 'Assistência técnica + autoproteção',
-    text: 'Carros novos, revisões preventivas em dia e cobertura inclusa.'
+    num: '04',
+    title: 'Controle financeiro',
+    desc: 'Pagamentos fixos e sem surpresas. Planeje seus ganhos mensais com total previsibilidade.'
   },
   {
-    icon: <CheckCircle2 size={26} color="#e0a203" />,
-    title: 'Zero burocracia',
-    text: 'Aprovação ágil para você pegar o carro e começar a lucrar rápido.'
+    num: '05',
+    title: 'Carro sempre disponível',
+    desc: 'Veículos novos e revisados garantem que seu trabalho não pare e você dirija com segurança.'
+  },
+  {
+    num: '06',
+    title: 'Agilidade',
+    desc: 'Contratação simples, entrega rápida e atendimento eficiente para você começar a rodar logo.'
   }
 ];
 
-const CONTROLE_POINTS = [
-  { num: '01', title: 'Vários modelos disponíveis', desc: 'Planos com diferentes modelos e coberturas que se adaptam perfeitamente ao seu ritmo.' },
-  { num: '02', title: 'Planos acessíveis', desc: 'Ótimo custo-benefício semanal, ideal para quem quer começar ou ampliar sua renda.' },
-  { num: '03', title: 'Diversas unidades no Brasil', desc: 'Atendimento nas principais regiões, com retirada, devolução e suporte rápido.' },
-  { num: '04', title: 'Controle financeiro', desc: 'Pagamentos fixos e sem surpresas. Planeje seus ganhos com total previsibilidade.' },
-  { num: '05', title: 'Carro sempre disponível', desc: 'Veículos novos e revisados garantem que seu trabalho não pare nunca.' },
-  { num: '06', title: 'Agilidade total', desc: 'Contratação simples, entrega rápida e atendimento eficiente.' }
-];
-
-const BENEFICIOS = [
+const BENEFICIOS_ITEMS = [
   {
-    icon: <ShieldCheck size={28} color="#0000ff" />,
-    title: 'Zero custo fixo burocrático',
-    desc: 'A LM cobre IPVA, proteção, manutenção preventiva e documentação. Você foca apenas em dirigir e faturar.'
+    icon: 'https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2025/11/carro.png',
+    title: 'Zero preocupação com custos fixos burocráticos',
+    desc: 'A LM cobre IPVA, proteção, manutenção preventiva e documentação. Você foca apenas no seu trabalho.'
   },
   {
-    icon: <Sparkles size={28} color="#0000ff" />,
+    icon: 'https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2025/11/money-plant.png',
     title: 'Baixo risco e investimento inicial',
-    desc: 'Sem entrada pesada, sem depreciação de veículo próprio e sem dívida bancária.'
+    desc: 'Sem entrada, sem depreciação e sem dívida. Você começa a rodar com custo reduzido.'
   },
   {
-    icon: <Car size={28} color="#0000ff" />,
-    title: 'Flexibilidade de plano',
-    desc: 'Escolha o modelo, o plano e a duração do contrato de acordo com a sua meta.'
+    icon: 'https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2025/11/lava-jato-1.png',
+    title: 'Flexibilidade',
+    desc: 'Escolha o modelo, o plano e a duração do contrato. Ajuste tudo conforme sua demanda.'
   },
   {
-    icon: <FileCheck size={28} color="#0000ff" />,
+    icon: 'https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2025/11/seguro-de-automovel-1.png',
     title: 'Sem burocracia',
-    desc: 'Processo rápido e transparente. Aprovou a documentação? Carro liberado para retirada.'
+    desc: 'Processo rápido e transparente. Aprovou a documentação? O carro já fica pronto para entrega.'
   },
   {
-    icon: <Clock size={28} color="#0000ff" />,
+    icon: 'https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2025/05/icon-faq-1.png',
     title: 'Assistência 24 horas',
-    desc: 'Suporte em todo o Brasil a qualquer hora do dia ou da noite para você nunca ficar na mão.'
+    desc: 'Suporte em todo o Brasil, a qualquer hora. A LM garante segurança durante o seu trajeto.'
   }
 ];
 
-const FAQS = [
+const FAQS_ITEMS = [
   {
     q: 'Como funciona a contratação de aluguel de carro para motorista de aplicativo?',
-    a: 'O processo é simples e rápido. Você escolhe o carro e o plano, envia a documentação necessária (CNH com EAR e comprovante de residência) e finaliza o contrato. Depois disso, basta retirar o veículo na unidade LM mais próxima e começar a rodar. Todos os carros já vêm revisados, licenciados e prontos para o uso profissional.'
+    a: 'O processo é simples e rápido. Você escolhe o carro e o plano, envia a documentação necessária e finaliza o contrato. Depois disso, basta retirar o veículo na unidade LM mais próxima e começar a rodar. Todos os carros já vêm revisados, licenciados e prontos para o uso profissional.'
   },
   {
     q: 'Quais os custos e considerações do aluguel de carro para motorista de aplicativo?',
-    a: 'A mensalidade cobre praticamente tudo: manutenção preventiva, proteção, IPVA e documentação. O motorista só precisa arcar com combustível, pedágios e eventuais infrações de trânsito. É um formato que reduz riscos e oferece previsibilidade sobre seus lucros.'
+    a: 'A mensalidade cobre praticamente tudo: manutenção preventiva, proteção, IPVA e documentação. O motorista só precisa arcar com combustível, multas e eventuais danos fora da cobertura. É um formato que reduz riscos e oferece controle total sobre seus ganhos.'
   },
   {
     q: 'O aluguel inclui manutenção preventiva, IPVA e proteção?',
-    a: 'Sim! Todos os veículos LM contam com manutenção preventiva, IPVA pago, proteção veicular e assistência 24 horas. Isso garante segurança, tranquilidade e economia para você focar apenas no seu rendimento.'
+    a: 'Sim. Todos os veículos LM contam com manutenção preventiva, IPVA pago, proteção e assistência 24 horas. Isso garante segurança, conforto e previsibilidade para quem depende do carro para trabalhar.'
   }
 ];
 
-const LOJAS = [
+const LOJAS_DATA = [
   {
-    nome: 'Unidade Contagem - MG',
+    cidade: 'Contagem',
     endereco: 'R. Zezé Camargos, 280 - Cidade Industrial, Contagem - MG, 32210-080',
-    imagem: 'https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2025/03/Contagem.jpg',
-    horario: 'Seg a Sex: 08h às 18h'
+    imagem: 'https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2025/03/Contagem.jpg'
   },
   {
-    nome: 'Unidade São Bernardo do Campo - SP',
-    endereco: 'Rua Frei Damião, 805 - Paulicéia, São Bernardo do Campo - SP, 09695-100',
-    imagem: 'https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2025/03/saobernardo.jpg',
-    horario: 'Seg a Sex: 08h às 18h'
+    cidade: 'São Bernardo',
+    endereco: 'Rua Frei Damião, 805 - Paulicéia São Bernardo do Campo - SP 09695-100',
+    imagem: 'https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2025/03/saobernardo.jpg'
   }
 ];
 
 export default function Loja() {
-  const [activeCategory, setActiveCategory] = useState('todos');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [openFaq, setOpenFaq] = useState(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedCar, setSelectedCar] = useState(null);
-  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [formSent, setFormSent] = useState(false);
   const [formData, setFormData] = useState({ nome: '', telefone: '', cidade: '' });
-  const [selectedLojaModal, setSelectedLojaModal] = useState(null);
+  const [openFaq, setOpenFaq] = useState(null);
+  const [activeModalInfo, setActiveModalInfo] = useState(null);
 
-  const filteredCars = VEICULOS_APPS.filter(car => {
-    const matchesCat = activeCategory === 'todos' || car.categoria === activeCategory;
-    const matchesSearch = car.nome.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          car.grupo.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesCat && matchesSearch;
-  });
+  // Auto carousel slide effect
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev === 0 ? 1 : 0));
+    }, 6000);
+    return () => clearInterval(timer);
+  }, []);
 
-  const handleOpenRentalModal = (car) => {
+  const handleOpenRental = (car) => {
     setSelectedCar(car);
-    setFormSubmitted(false);
+    setFormSent(false);
     setFormData({ nome: '', telefone: '', cidade: '' });
   };
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    setFormSubmitted(true);
+    setFormSent(true);
   };
 
   return (
-    <div style={{ background: '#f8fafc', minHeight: '100vh', paddingBottom: '90px' }}>
+    <div style={{ background: '#fff', color: '#0f0b33', fontFamily: "'DM Sans', sans-serif", paddingBottom: 80 }}>
       
-      {/* ===== HERO SLIDE SECTION ===== */}
-      <section style={{ 
-        background: 'linear-gradient(135deg, #0a0e2a 0%, #171c42 100%)', 
-        color: '#fff', 
-        padding: '36px 16px 44px', 
+      {/* ===== HEADER OFICIAL LM VEÍCULOS APPS ===== */}
+      <header style={{ 
+        background: '#e0a203', 
+        padding: '16px 20px 10px', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'space-between',
         position: 'relative',
-        overflow: 'hidden'
+        zIndex: 10
       }}>
+        {/* Logo pill */}
         <div style={{
-          position: 'absolute',
-          top: -40,
-          right: -40,
-          width: 240,
-          height: 240,
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(224, 162, 3, 0.25) 0%, transparent 70%)',
-          pointerEvents: 'none'
-        }} />
+          background: '#ffffff',
+          borderRadius: 30,
+          padding: '7px 18px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 10,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+        }}>
+          <img 
+            src="https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2022/08/LM_apps.svg" 
+            alt="LM Veículos para Apps" 
+            style={{ height: 26, width: 'auto' }} 
+          />
+          <span style={{ color: '#e0a203', fontWeight: 900, fontSize: 13 }}>▶</span>
+        </div>
 
-        <div style={{ maxWidth: 980, margin: '0 auto', position: 'relative', zIndex: 2 }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#e0a203', color: '#000', padding: '4px 12px', borderRadius: 20, fontSize: 12, fontWeight: 800, textTransform: 'uppercase', marginBottom: 16 }}>
-            <Sparkles size={14} /> LM Veículos para Apps
-          </div>
+        {/* Menu pill */}
+        <button 
+          onClick={() => setActiveModalInfo({ title: 'Menu LM Apps', content: 'Você já está navegando na página oficial da LM Veículos para Apps.' })}
+          style={{
+            background: '#ffffff',
+            border: 'none',
+            borderRadius: 30,
+            padding: '8px 22px',
+            fontSize: 14,
+            fontWeight: 700,
+            color: '#0f0b33',
+            cursor: 'pointer',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+          }}
+        >
+          Menu
+        </button>
+      </header>
 
-          <h1 style={{ 
-            fontSize: 'clamp(22px, 5vw, 36px)', 
-            fontWeight: 800, 
-            lineHeight: 1.25, 
-            color: '#ffffff', 
-            marginBottom: 12 
-          }}>
-            Carros de entrada com o <span style={{ color: '#e0a203' }}>menor valor semanal</span> do mercado
-          </h1>
+      {/* ===== CARROSSEL HERO OFICIAL ===== */}
+      <section style={{ 
+        position: 'relative', 
+        background: '#e0a203', 
+        overflow: 'hidden',
+        paddingBottom: 24 
+      }}>
+        {/* Scallop arc cutout */}
+        <div style={{ width: '100%', overflow: 'hidden', lineHeight: 0, fill: '#e0a203' }}>
+          <svg viewBox="0 0 500 35" preserveAspectRatio="none" style={{ height: 18, width: '100%' }}>
+            <path d="M0.00,0.00 C150.00,30.00 350.00,30.00 500.00,0.00 L500.00,0.00 L0.00,0.00 Z" style={{ fill: '#e0a203' }}></path>
+          </svg>
+        </div>
 
-          <p style={{ color: '#cbd5e1', fontSize: 15, maxWidth: 580, lineHeight: 1.5, marginBottom: 20 }}>
-            Alugue com a LM e trabalhe como motorista de aplicativo (Uber, 99 e outros) sem se preocupar com IPVA, seguro ou manutenção!
-          </p>
-
+        {/* SLIDE 1: O JEITO ECONÔMICO PARA VOCÊ RODAR */}
+        {currentSlide === 0 && (
           <div style={{ 
-            background: 'rgba(255, 255, 255, 0.08)', 
-            border: '1px solid rgba(224, 162, 3, 0.4)', 
-            borderRadius: 16, 
-            padding: '16px 20px', 
-            display: 'inline-block',
-            marginBottom: 24
+            animation: 'fadeIn 0.5s ease-in-out', 
+            padding: '10px 16px 20px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            textAlign: 'center'
           }}>
-            <span style={{ fontSize: 13, color: '#94a3b8', display: 'block' }}>Planos a partir de</span>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
-              <span style={{ fontSize: 16, color: '#e0a203', fontWeight: 700 }}>R$</span>
-              <span style={{ fontSize: 34, fontWeight: 900, color: '#ffffff' }}>690</span>
-              <span style={{ fontSize: 14, color: '#e0a203', fontWeight: 700 }}>,00 / semana</span>
+            {/* Imagem do homem apontando para o celular e os 3 carros */}
+            <div style={{ width: '100%', maxWidth: 440, position: 'relative', marginBottom: 12 }}>
+              <img 
+                src="https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2026/04/apps1.png" 
+                alt="LM Veículos Apps" 
+                style={{ width: '100%', height: 'auto', display: 'block' }}
+              />
+            </div>
+
+            {/* Imagem do texto gráfico "O jeito econômico para você RODAR" */}
+            <div style={{ maxWidth: 320, margin: '0 auto 16px' }}>
+              <img 
+                src="https://lmmobilidade.com.br/lmveiculosapps/wp-content/themes/lmmobilidade-iwwa/img/slide/abril/rodar.png" 
+                alt="O jeito econômico para você Rodar"
+                style={{ width: '100%', height: 'auto', display: 'block' }} 
+              />
+            </div>
+
+            {/* 4 Ícones oficiais da LM */}
+            <div style={{ 
+              display: 'flex', 
+              flexWrap: 'wrap', 
+              justifyContent: 'center', 
+              gap: 12,
+              width: '100%',
+              maxWidth: 420
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#fff', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', textAlign: 'left' }}>
+                <img src="https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2026/04/01.png" alt="" style={{ width: 28, height: 'auto' }} />
+                <span>Sem despesa <br/>com seguro</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#fff', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', textAlign: 'left' }}>
+                <img src="https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2026/04/02.png" alt="" style={{ width: 28, height: 'auto' }} />
+                <span>IPVA <br/>PAGO</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#fff', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', textAlign: 'left' }}>
+                <img src="https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2026/04/03.png" alt="" style={{ width: 28, height: 'auto' }} />
+                <span>MANUTENÇÃO <br/>PREVENTIVA</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#fff', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', textAlign: 'left' }}>
+                <img src="https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2026/04/04.png" alt="" style={{ width: 28, height: 'auto' }} />
+                <span>CARRO <br/>RESERVA</span>
+              </div>
             </div>
           </div>
+        )}
 
-          {/* 3 Pill features */}
+        {/* SLIDE 2: CARROS DE ENTRADA COM O MENOR VALOR SEMANAL */}
+        {currentSlide === 1 && (
           <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', 
-            gap: 10,
-            marginBottom: 24 
+            animation: 'fadeIn 0.5s ease-in-out', 
+            padding: '24px 20px 20px',
+            color: '#fff',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            textAlign: 'center'
           }}>
-            <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 10, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 10 }}>
-              <ShieldCheck size={20} color="#e0a203" />
-              <span style={{ fontSize: 13, fontWeight: 600, color: '#f1f5f9' }}>Sem despesa com seguro</span>
-            </div>
-            <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 10, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 10 }}>
-              <FileCheck size={20} color="#e0a203" />
-              <span style={{ fontSize: 13, fontWeight: 600, color: '#f1f5f9' }}>IPVA 100% Pago</span>
-            </div>
-            <div style={{ background: 'rgba(255,255,255,0.06)', borderRadius: 10, padding: '10px 14px', display: 'flex', alignItems: 'center', gap: 10 }}>
-              <Wrench size={20} color="#e0a203" />
-              <span style={{ fontSize: 13, fontWeight: 600, color: '#f1f5f9' }}>Manutenção preventiva</span>
-            </div>
-          </div>
+            <h2 style={{ fontSize: 24, fontWeight: 800, lineHeight: 1.25, maxWidth: 360, margin: '0 auto 16px' }}>
+              Carros de entrada com o menor valor semanal do mercado
+            </h2>
 
-          <a 
-            href="#catalogo-veiculos" 
-            style={{ 
-              display: 'inline-flex', 
-              alignItems: 'center', 
-              justifyContent: 'center',
-              gap: 8, 
-              background: '#e0a203', 
-              color: '#000', 
-              fontWeight: 800, 
-              padding: '12px 24px', 
-              borderRadius: 30, 
-              textDecoration: 'none',
-              fontSize: 15,
-              boxShadow: '0 6px 20px rgba(224, 162, 3, 0.35)',
-              transition: 'transform 0.2s ease'
+            <div style={{ margin: '8px 0 16px' }}>
+              <span style={{ fontSize: 14, fontWeight: 600, display: 'block' }}>Planos a partir de</span>
+              <div style={{ fontSize: 38, fontWeight: 900, lineHeight: 1 }}>
+                <small style={{ fontSize: 22 }}>R$</small> 690 <span style={{ fontSize: 16 }}>,00/semana</span>
+              </div>
+            </div>
+
+            {/* 4 Ícones oficiais de vantagens */}
+            <div style={{ 
+              display: 'flex', 
+              flexWrap: 'wrap', 
+              justifyContent: 'center', 
+              gap: 12,
+              margin: '12px auto',
+              maxWidth: 420
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#fff', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', textAlign: 'left' }}>
+                <img src="https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2026/04/011.png" alt="" style={{ width: 28, height: 'auto' }} />
+                <span>Sem despesa <br/>com seguro</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#fff', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', textAlign: 'left' }}>
+                <img src="https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2026/04/012.png" alt="" style={{ width: 28, height: 'auto' }} />
+                <span>IPVA <br/>pago</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#fff', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', textAlign: 'left' }}>
+                <img src="https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2026/04/013.png" alt="" style={{ width: 28, height: 'auto' }} />
+                <span>Manutenção <br/>preventiva</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#fff', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', textAlign: 'left' }}>
+                <img src="https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2026/04/014.png" alt="" style={{ width: 28, height: 'auto' }} />
+                <span>Carro <br/>reserva</span>
+              </div>
+            </div>
+
+            <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.8)', marginTop: 10, display: 'block' }}>
+              *Imagens ilustrativas. Consulte condições na contratação.
+            </span>
+          </div>
+        )}
+
+        {/* Paginação do Carrossel (Dots) */}
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 10 }}>
+          <button 
+            onClick={() => setCurrentSlide(0)}
+            style={{
+              width: currentSlide === 0 ? 24 : 10,
+              height: 10,
+              borderRadius: 5,
+              background: currentSlide === 0 ? '#ffffff' : 'rgba(255,255,255,0.45)',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease'
             }}
-          >
-            Ver ofertas e veículos disponíveis
-          </a>
+          />
+          <button 
+            onClick={() => setCurrentSlide(1)}
+            style={{
+              width: currentSlide === 1 ? 24 : 10,
+              height: 10,
+              borderRadius: 5,
+              background: currentSlide === 1 ? '#ffffff' : 'rgba(255,255,255,0.45)',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease'
+            }}
+          />
         </div>
       </section>
 
-      {/* ===== DIFFERENTIALS (POR QUE ESCOLHER LM) ===== */}
-      <section style={{ padding: '36px 16px', maxWidth: 980, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 28 }}>
-          <span style={{ color: '#e0a203', fontWeight: 800, fontSize: 13, textTransform: 'uppercase', letterSpacing: 1 }}>Diferenciais exclusivos</span>
-          <h2 style={{ fontSize: 'clamp(20px, 4vw, 28px)', fontWeight: 800, color: '#0f172a', marginTop: 4 }}>
-            Por que escolher a LM Veículos para APPs?
-          </h2>
-          <p style={{ color: '#64748b', fontSize: 14, marginTop: 6 }}>
-            Mais lucro no seu bolso e tranquilidade enquanto você roda
-          </p>
-        </div>
-
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', 
-          gap: 14 
+      {/* ===== SECTION DIFERENCIAIS ===== */}
+      <section style={{ padding: '34px 16px 20px', maxWidth: 900, margin: '0 auto' }}>
+        <h2 style={{
+          fontSize: 'clamp(20px, 4vw, 26px)',
+          fontWeight: 800,
+          color: '#e0a203',
+          textAlign: 'center',
+          marginBottom: 20
         }}>
-          {DIFERENCIAIS.map((item, idx) => (
-            <div 
-              key={idx}
-              style={{
-                background: '#ffffff',
-                border: '1px solid #e2e8f0',
-                borderRadius: 14,
-                padding: '20px 16px',
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: 14,
-                boxShadow: '0 2px 8px rgba(0,0,0,0.03)'
-              }}
-            >
-              <div style={{ 
-                background: '#fef3c7', 
-                padding: 10, 
-                borderRadius: 12, 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center',
-                flexShrink: 0 
-              }}>
-                {item.icon}
-              </div>
-              <div>
-                <h3 style={{ fontSize: 15, fontWeight: 700, color: '#0f172a', marginBottom: 4 }}>{item.title}</h3>
-                <p style={{ fontSize: 13, color: '#64748b', lineHeight: 1.45, margin: 0 }}>{item.text}</p>
-              </div>
+          Por que escolher LM Veículos para APPs?
+        </h2>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          {/* Item 1: Card Dourado Full */}
+          <div style={{
+            background: '#e0a203',
+            color: '#ffffff',
+            borderRadius: 12,
+            padding: '20px 18px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 16,
+            boxShadow: '0 4px 14px rgba(224, 162, 3, 0.25)'
+          }}>
+            {/* 4 ícones em 2x2 */}
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(2, 28px)', 
+              gap: 6,
+              flexShrink: 0
+            }}>
+              <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#e0a203', fontWeight: 900, fontSize: 13 }}>🚗</div>
+              <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#e0a203', fontWeight: 900, fontSize: 13 }}>✓</div>
+              <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#e0a203', fontWeight: 900, fontSize: 13 }}>★</div>
+              <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#e0a203', fontWeight: 900, fontSize: 13 }}>$</div>
             </div>
-          ))}
+
+            <div>
+              <h3 style={{ fontSize: 16, fontWeight: 800, margin: '0 0 6px', color: '#ffffff' }}>
+                Condições únicas para motorista de aplicativo
+              </h3>
+              <p style={{ fontSize: 13, margin: 0, opacity: 0.95, lineHeight: 1.4 }}>
+                Diversos planos e modelos para quem quer rodar como motorista de aplicativo.
+              </p>
+            </div>
+          </div>
+
+          {/* Linha 2: 2 cards lado a lado */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
+            {/* Card Melhor Custo Benefício */}
+            <div style={{
+              background: '#ffffff',
+              border: '1px solid #E6EBED',
+              borderRadius: 12,
+              padding: '18px 14px',
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center'
+            }}>
+              <div style={{ fontSize: 26, color: '#e0a203', marginBottom: 6 }}>💰</div>
+              <h3 style={{ fontSize: 14, fontWeight: 800, color: '#e0a203', margin: '0 0 6px' }}>
+                Melhor custo benefício
+              </h3>
+              <p style={{ fontSize: 12, color: '#475569', margin: 0, lineHeight: 1.35 }}>
+                Para você rodar como motorista de aplicativo
+              </p>
+            </div>
+
+            {/* Card Assistência 24h */}
+            <div style={{
+              background: '#ffffff',
+              border: '1px solid #E6EBED',
+              borderRadius: 12,
+              padding: '18px 14px',
+              textAlign: 'center',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center'
+            }}>
+              <div style={{ fontSize: 26, color: '#e0a203', marginBottom: 6 }}>🛡️</div>
+              <h3 style={{ fontSize: 14, fontWeight: 800, color: '#e0a203', margin: '0 0 6px' }}>
+                Assistência 24h
+              </h3>
+              <p style={{ fontSize: 12, color: '#475569', margin: 0, lineHeight: 1.35 }}>
+                Tranquilidade o tempo todo pra você rodar sem preocupações.
+              </p>
+            </div>
+          </div>
+
+          {/* Linha 3: Card Branco Full (Assistência Técnica + Autoproteção) */}
+          <div style={{
+            background: '#ffffff',
+            border: '1px solid #E6EBED',
+            borderRadius: 12,
+            padding: '18px 18px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 16
+          }}>
+            <img 
+              src="https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2022/08/icone-baixa-km.png" 
+              alt="Assistência técnica"
+              style={{ width: 48, height: 'auto', flexShrink: 0 }} 
+            />
+            <div>
+              <h3 style={{ fontSize: 15, fontWeight: 800, color: '#e0a203', margin: '0 0 4px' }}>
+                Assistência técnica + autoproteção
+              </h3>
+              <p style={{ fontSize: 13, color: '#475569', margin: 0, lineHeight: 1.4 }}>
+                Carros novos e com manutenção em dia.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ===== CATALOGO DE VEICULOS ===== */}
-      <section id="catalogo-veiculos" style={{ padding: '36px 16px', maxWidth: 980, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 20 }}>
-          <span style={{ color: '#0000ff', fontWeight: 800, fontSize: 13, textTransform: 'uppercase', letterSpacing: 1 }}>Nossa Frota</span>
-          <h2 style={{ fontSize: 'clamp(20px, 4vw, 30px)', fontWeight: 800, color: '#0f172a', marginTop: 4 }}>
-            Nossos Veículos para Motoristas de App
-          </h2>
-          <p style={{ color: '#64748b', fontSize: 14, marginTop: 4 }}>
-            Carros 100% revisados, higienizados e homologados para Uber e 99
-          </p>
-        </div>
-
-        {/* Search & Category Filter */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 24 }}>
-          {/* Search bar */}
-          <div style={{ position: 'relative' }}>
-            <Search size={18} color="#94a3b8" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)' }} />
-            <input 
-              type="text"
-              placeholder="Buscar por modelo ou grupo (ex: Kwid, HB20, Sedan...)"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '12px 14px 12px 42px',
-                borderRadius: 24,
-                border: '1px solid #cbd5e1',
-                background: '#ffffff',
-                fontSize: 14,
-                outline: 'none',
-                boxShadow: '0 2px 6px rgba(0,0,0,0.02)'
-              }}
-            />
-          </div>
-
-          {/* Categories */}
-          <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4, scrollbarWidth: 'none' }}>
-            {[
-              { id: 'todos', label: 'Todos os Veículos' },
-              { id: 'economicos', label: 'Econômicos' },
-              { id: 'sedans', label: 'Sedans (Viagens/Porta-malas)' },
-              { id: 'automaticos', label: 'Automáticos' },
-              { id: 'suvs', label: 'SUVs (Alto Padrão)' }
-            ].map(cat => (
-              <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-                style={{
-                  background: activeCategory === cat.id ? '#0000ff' : '#ffffff',
-                  color: activeCategory === cat.id ? '#ffffff' : '#334155',
-                  border: activeCategory === cat.id ? '1px solid #0000ff' : '1px solid #cbd5e1',
-                  borderRadius: 20,
-                  padding: '8px 16px',
-                  fontSize: 13,
-                  fontWeight: 700,
-                  whiteSpace: 'nowrap',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease'
-                }}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Vehicles Grid */}
+      {/* ===== SECTION CONHEÇA OS VEÍCULOS DISPONÍVEIS ===== */}
+      <section id="nossos-veiculos-app" style={{ padding: '30px 14px 40px', maxWidth: 960, margin: '0 auto' }}>
+        
+        {/* Links superiores oficiais */}
         <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
-          gap: 20 
+          textAlign: 'center', 
+          fontSize: 12, 
+          color: '#475569', 
+          marginBottom: 10,
+          display: 'flex',
+          justifyContent: 'center',
+          gap: 16
         }}>
-          {filteredCars.map(car => (
+          <span 
+            onClick={() => setActiveModalInfo({ title: 'Condições Contratuais', content: 'Contratos flexíveis semanais com IPVA pago, proteção veicular, manutenção preventiva inclusa e assistência 24h em todo o Brasil.' })}
+            style={{ cursor: 'pointer', textDecoration: 'underline' }}
+          >
+            Veja nossas condições contratuais
+          </span>
+          <span>•</span>
+          <span 
+            onClick={() => setActiveModalInfo({ title: 'Tabela de Avarias', content: 'A LM disponibiliza transparência total nas inspeções de entrega e devolução dos veículos.' })}
+            style={{ cursor: 'pointer', textDecoration: 'underline' }}
+          >
+            Tabela de Avarias
+          </span>
+        </div>
+
+        {/* Título oficial dourado */}
+        <h2 style={{
+          fontSize: 'clamp(20px, 4.5vw, 28px)',
+          fontWeight: 800,
+          color: '#e0a203',
+          textAlign: 'center',
+          marginBottom: 24
+        }}>
+          Conheça os veículos disponíveis
+        </h2>
+
+        {/* Grid de Veículos: 2 colunas no celular exatamente como no site oficial */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+          gap: 14
+        }}>
+          {VEICULOS_APPS.map((car) => (
             <div 
               key={car.id}
               style={{
                 background: '#ffffff',
-                borderRadius: 18,
-                border: '1px solid #e2e8f0',
+                border: '1px solid #E6EBED',
+                borderRadius: 12,
                 overflow: 'hidden',
-                boxShadow: '0 4px 16px rgba(0,0,0,0.04)',
                 display: 'flex',
                 flexDirection: 'column',
-                transition: 'transform 0.2s ease'
+                boxShadow: '0 2px 10px rgba(0,0,0,0.03)',
+                position: 'relative'
               }}
             >
-              {/* Image box */}
+              {/* Imagem do carro sem fundo com sombra natural */}
               <div style={{ 
-                background: 'linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%)', 
-                padding: '20px 16px 10px',
-                textAlign: 'center',
-                position: 'relative'
+                padding: '14px 10px 4px', 
+                minHeight: 110,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
               }}>
-                <span style={{
-                  position: 'absolute',
-                  top: 12,
-                  left: 12,
-                  background: '#0000ff',
-                  color: '#ffffff',
-                  padding: '3px 10px',
-                  borderRadius: 12,
-                  fontSize: 11,
-                  fontWeight: 700,
-                  textTransform: 'uppercase'
-                }}>
-                  {car.grupo}
-                </span>
-
-                <span style={{
-                  position: 'absolute',
-                  top: 12,
-                  right: 12,
-                  background: 'rgba(0,0,0,0.6)',
-                  color: '#ffffff',
-                  padding: '3px 8px',
-                  borderRadius: 10,
-                  fontSize: 10,
-                  fontWeight: 600
-                }}>
-                  *consulte disp.
-                </span>
-
                 <img 
                   src={car.imagem} 
                   alt={car.nome}
                   style={{ 
-                    maxHeight: 145, 
                     maxWidth: '100%', 
-                    objectFit: 'contain',
-                    marginTop: 10,
-                    filter: 'drop-shadow(0 8px 12px rgba(0,0,0,0.15))' 
+                    maxHeight: 95, 
+                    objectFit: 'contain'
                   }} 
                 />
               </div>
 
-              {/* Card Body */}
-              <div style={{ padding: '18px 16px', display: 'flex', flexDirection: 'column', flex: 1 }}>
-                <div style={{ fontSize: 12, fontWeight: 700, color: '#e0a203', textTransform: 'uppercase' }}>
-                  {car.tipo}
-                </div>
-                <h3 style={{ fontSize: 17, fontWeight: 800, color: '#0f172a', margin: '4px 0 10px' }}>
-                  {car.nome}
-                </h3>
-                <p style={{ fontSize: 12, color: '#64748b', margin: '0 0 12px', lineHeight: 1.4 }}>
-                  {car.obs}
-                </p>
+              {/* Tag consulte disponibilidade */}
+              <div style={{ 
+                padding: '0 12px', 
+                fontSize: 10, 
+                fontWeight: 600, 
+                color: '#e0a203',
+                marginBottom: 6 
+              }}>
+                {car.obs}
+              </div>
 
-                {/* Tags */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 16 }}>
-                  {car.destaques.map((d, i) => (
-                    <span 
-                      key={i}
-                      style={{ 
-                        background: '#f1f5f9', 
-                        color: '#475569', 
-                        fontSize: 11, 
-                        fontWeight: 600, 
-                        padding: '3px 8px', 
-                        borderRadius: 6 
-                      }}
-                    >
-                      ✓ {d}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Price & CTA */}
-                <div style={{ marginTop: 'auto', borderTop: '1px solid #f1f5f9', paddingTop: 14, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <div>
-                    <span style={{ fontSize: 11, color: '#64748b', display: 'block' }}>A partir de</span>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 2 }}>
-                      <span style={{ fontSize: 12, fontWeight: 700, color: '#0000ff' }}>R$</span>
-                      <span style={{ fontSize: 20, fontWeight: 900, color: '#0f172a' }}>{car.preco}</span>
-                      <span style={{ fontSize: 11, color: '#64748b', fontWeight: 600 }}>/sem</span>
-                    </div>
+              {/* Corpo de texto do Card */}
+              <div style={{ 
+                padding: '0 12px 14px', 
+                display: 'flex', 
+                flexDirection: 'column', 
+                flexGrow: 1,
+                justifyContent: 'space-between'
+              }}>
+                <div>
+                  {/* Badge de Grupo */}
+                  <div style={{
+                    background: '#e0a203',
+                    color: '#ffffff',
+                    borderRadius: 4,
+                    padding: '2px 8px',
+                    fontSize: 10,
+                    fontWeight: 700,
+                    display: 'inline-block',
+                    marginBottom: 6
+                  }}>
+                    {car.grupo}
                   </div>
 
-                  <button
-                    onClick={() => handleOpenRentalModal(car)}
-                    style={{
-                      background: '#20B038',
-                      color: '#ffffff',
-                      border: 'none',
-                      padding: '10px 16px',
-                      borderRadius: 22,
-                      fontSize: 13,
-                      fontWeight: 700,
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 6,
-                      cursor: 'pointer',
-                      boxShadow: '0 4px 12px rgba(32, 176, 56, 0.3)'
-                    }}
-                  >
-                    <span>Quero alugar</span>
-                  </button>
+                  {/* Nome do carro */}
+                  <div style={{
+                    fontSize: 13,
+                    fontWeight: 800,
+                    color: '#0f0b33',
+                    lineHeight: 1.25,
+                    marginBottom: 8,
+                    minHeight: 32
+                  }}>
+                    {car.nome}
+                  </div>
+
+                  {/* Preço */}
+                  <div style={{ marginBottom: 10 }}>
+                    <span style={{ fontSize: 10, color: '#64748b', display: 'block' }}>A partir de</span>
+                    <div style={{ color: '#0f0b33', fontSize: 11, fontWeight: 700 }}>
+                      <span style={{ fontSize: 15, fontWeight: 900 }}>R$ {car.preco}</span> / semana
+                    </div>
+                  </div>
                 </div>
+
+                {/* Botão Quero Alugar */}
+                <button
+                  onClick={() => handleOpenRental(car)}
+                  style={{
+                    background: '#d98e04',
+                    color: '#ffffff',
+                    border: 'none',
+                    borderRadius: 24,
+                    padding: '8px 10px',
+                    fontSize: 12,
+                    fontWeight: 800,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 6,
+                    cursor: 'pointer',
+                    width: '100%',
+                    boxShadow: '0 2px 6px rgba(217, 142, 4, 0.3)'
+                  }}
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.971.53 1.771.815 2.796.815 3.18 0 5.767-2.587 5.768-5.766.001-3.181-2.585-5.767-5.768-5.767zm0 10.455c-.947 0-1.637-.253-2.451-.737l-.175-.104-1.579.414.422-1.54-.113-.18c-.534-.849-.816-1.573-.815-2.542.001-2.583 2.103-4.685 4.711-4.685 2.583 0 4.685 2.102 4.686 4.711 0 2.584-2.103 4.683-4.711 4.683z" />
+                  </svg>
+                  <span>Quero alugar</span>
+                </button>
               </div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ===== SECTION 6 NUMERIC POINTS (VOCE NO CONTROLE) ===== */}
-      <section style={{ background: '#ffffff', borderTop: '1px solid #e2e8f0', borderBottom: '1px solid #e2e8f0', padding: '40px 16px' }}>
-        <div style={{ maxWidth: 980, margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: 30 }}>
-            <span style={{ color: '#0000ff', fontWeight: 800, fontSize: 13, textTransform: 'uppercase', letterSpacing: 1 }}>Autonomia e Lucro</span>
-            <h2 style={{ fontSize: 'clamp(20px, 4vw, 28px)', fontWeight: 800, color: '#0f172a', marginTop: 4 }}>
-              Você no controle do aluguel de carro para motorista de aplicativo
-            </h2>
-            <p style={{ color: '#64748b', fontSize: 14, marginTop: 4 }}>
-              Tudo o que você precisa para maximizar suas corridas e planejar sua rotina
+      {/* ===== SECTION NOSSAS LOJAS ===== */}
+      <section style={{ background: '#f8fafc', padding: '34px 16px', borderTop: '1px solid #e2e8f0' }}>
+        <div style={{ maxWidth: 840, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 20 }}>
+            <h3 style={{ fontSize: 22, fontWeight: 800, color: '#e0a203', margin: '0 0 4px' }}>
+              Nossas lojas
+            </h3>
+            <p style={{ fontSize: 13, color: '#64748b', margin: 0 }}>
+              Conheça nossos endereços.
             </p>
           </div>
 
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', 
-            gap: 16 
-          }}>
-            {CONTROLE_POINTS.map((pt, i) => (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 16 }}>
+            {LOJAS_DATA.map((loja, i) => (
               <div 
                 key={i}
                 style={{
-                  background: '#f8fafc',
-                  border: '1px solid #e2e8f0',
-                  borderRadius: 14,
-                  padding: '18px 16px',
-                  display: 'flex',
-                  gap: 14
-                }}
-              >
-                <div style={{ 
-                  color: '#e0a203', 
-                  fontSize: 24, 
-                  fontWeight: 900, 
-                  lineHeight: 1, 
-                  fontFamily: 'monospace' 
-                }}>
-                  {pt.num}
-                </div>
-                <div>
-                  <h3 style={{ fontSize: 15, fontWeight: 700, color: '#0f172a', marginBottom: 4 }}>{pt.title}</h3>
-                  <p style={{ fontSize: 13, color: '#64748b', lineHeight: 1.45, margin: 0 }}>{pt.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== BENEFICIOS SECTION ===== */}
-      <section style={{ padding: '40px 16px', maxWidth: 980, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 30 }}>
-          <span style={{ color: '#e0a203', fontWeight: 800, fontSize: 13, textTransform: 'uppercase', letterSpacing: 1 }}>Vantagens Reais</span>
-          <h2 style={{ fontSize: 'clamp(20px, 4vw, 28px)', fontWeight: 800, color: '#0f172a', marginTop: 4 }}>
-            Quais são os benefícios de alugar com a LM?
-          </h2>
-          <p style={{ color: '#64748b', fontSize: 14, maxWidth: 640, margin: '8px auto 0', lineHeight: 1.5 }}>
-            Aqui você não se preocupa com burocracia, custos fixos de depreciação ou manutenção imprevista. O foco é 100% no seu ganho.
-          </p>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(270px, 1fr))', gap: 16 }}>
-          {BENEFICIOS.map((b, i) => (
-            <div 
-              key={i}
-              style={{
-                background: '#ffffff',
-                border: '1px solid #e2e8f0',
-                borderRadius: 16,
-                padding: '22px 18px',
-                boxShadow: '0 2px 10px rgba(0,0,0,0.03)'
-              }}
-            >
-              <div style={{ marginBottom: 12 }}>{b.icon}</div>
-              <h3 style={{ fontSize: 16, fontWeight: 700, color: '#0f172a', marginBottom: 6 }}>{b.title}</h3>
-              <p style={{ fontSize: 13, color: '#64748b', lineHeight: 1.5, margin: 0 }}>{b.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ===== NOSSAS LOJAS ===== */}
-      <section style={{ background: '#f1f5f9', padding: '40px 16px' }}>
-        <div style={{ maxWidth: 980, margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: 28 }}>
-            <span style={{ color: '#0000ff', fontWeight: 800, fontSize: 13, textTransform: 'uppercase', letterSpacing: 1 }}>Presença Física</span>
-            <h2 style={{ fontSize: 'clamp(20px, 4vw, 28px)', fontWeight: 800, color: '#0f172a', marginTop: 4 }}>
-              Nossas Lojas e Pontos de Atendimento
-            </h2>
-            <p style={{ color: '#64748b', fontSize: 14, marginTop: 4 }}>
-              Retirada rápida com agendamento e consultores dedicados para motoristas
-            </p>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
-            {LOJAS.map((loja, idx) => (
-              <div 
-                key={idx}
-                style={{
                   background: '#ffffff',
-                  borderRadius: 16,
+                  borderRadius: 12,
+                  border: '1px solid #e2e8f0',
                   overflow: 'hidden',
-                  border: '1px solid #cbd5e1',
-                  boxShadow: '0 4px 14px rgba(0,0,0,0.04)',
                   display: 'flex',
                   flexDirection: 'column'
                 }}
               >
                 <img 
                   src={loja.imagem} 
-                  alt={loja.nome} 
-                  style={{ width: '100%', height: 180, objectFit: 'cover' }}
+                  alt={loja.cidade} 
+                  style={{ width: '100%', height: 160, objectFit: 'cover' }}
                 />
-                <div style={{ padding: '18px 16px', display: 'flex', flexDirection: 'column', flex: 1 }}>
-                  <h3 style={{ fontSize: 17, fontWeight: 800, color: '#0f172a', marginBottom: 6 }}>{loja.nome}</h3>
-                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 6, color: '#64748b', fontSize: 13, marginBottom: 8 }}>
-                    <MapPin size={16} color="#0000ff" style={{ flexShrink: 0, marginTop: 2 }} />
-                    <span>{loja.endereco}</span>
-                  </div>
-                  <div style={{ fontSize: 12, color: '#94a3b8', marginBottom: 16 }}>
-                    ⏰ {loja.horario}
-                  </div>
-
+                <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                  <h4 style={{ fontSize: 16, fontWeight: 800, color: '#0f0b33', margin: '0 0 6px' }}>
+                    {loja.cidade}
+                  </h4>
+                  <p style={{ fontSize: 12, color: '#64748b', lineHeight: 1.4, margin: '0 0 14px' }}>
+                    {loja.endereco}
+                  </p>
                   <button
-                    onClick={() => setSelectedLojaModal(loja)}
+                    onClick={() => setActiveModalInfo({ title: `Unidade ${loja.cidade}`, content: `Endereço completo:\n${loja.endereco}\n\nHorário de atendimento: Segunda a sexta, das 8h às 18h.` })}
                     style={{
                       marginTop: 'auto',
-                      background: '#0000ff',
+                      background: '#e0a203',
                       color: '#ffffff',
                       border: 'none',
-                      padding: '10px 14px',
-                      borderRadius: 10,
-                      fontSize: 13,
-                      fontWeight: 700,
-                      cursor: 'pointer'
+                      padding: '8px 16px',
+                      borderRadius: 20,
+                      fontSize: 12,
+                      fontWeight: 800,
+                      cursor: 'pointer',
+                      alignSelf: 'flex-start'
                     }}
                   >
-                    Ver detalhes do endereço
+                    Traçar rota
                   </button>
                 </div>
               </div>
@@ -720,28 +735,105 @@ export default function Loja() {
         </div>
       </section>
 
-      {/* ===== FAQ SECTION ===== */}
+      {/* ===== SECTION NUMERIC LIST: VOCÊ NO CONTROLE ===== */}
       <section style={{ padding: '40px 16px', maxWidth: 840, margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: 28 }}>
-          <span style={{ color: '#e0a203', fontWeight: 800, fontSize: 13, textTransform: 'uppercase', letterSpacing: 1 }}>Tire suas dúvidas</span>
-          <h2 style={{ fontSize: 'clamp(20px, 4vw, 28px)', fontWeight: 800, color: '#0f172a', marginTop: 4 }}>
-            Dúvidas Frequentes sobre Aluguel para Apps
-          </h2>
-          <p style={{ color: '#64748b', fontSize: 14, marginTop: 4 }}>
-            Respostas diretas e transparentes para motoristas
-          </p>
-        </div>
+        <h2 style={{ fontSize: 'clamp(19px, 4vw, 25px)', fontWeight: 800, color: '#0f0b33', textAlign: 'center', marginBottom: 26 }}>
+          Você no controle do aluguel de carro para motorista de aplicativo
+        </h2>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {FAQS.map((faq, idx) => {
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 16 }}>
+          {CONTROLE_ITEMS.map((item, idx) => (
+            <div 
+              key={idx}
+              style={{
+                background: '#ffffff',
+                border: '1px solid #E6EBED',
+                borderRadius: 10,
+                padding: '16px',
+                display: 'flex',
+                gap: 14
+              }}
+            >
+              <div style={{ 
+                color: '#e0a203', 
+                fontSize: 22, 
+                fontWeight: 900, 
+                lineHeight: 1 
+              }}>
+                {item.num}
+              </div>
+              <div>
+                <h3 style={{ fontSize: 14, fontWeight: 800, color: '#0f0b33', margin: '0 0 4px' }}>
+                  {item.title}
+                </h3>
+                <p style={{ fontSize: 12, color: '#64748b', margin: 0, lineHeight: 1.45 }}>
+                  {item.desc}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ===== SECTION BENEFÍCIOS ===== */}
+      <section style={{ background: '#f8fafc', padding: '40px 16px', borderTop: '1px solid #e2e8f0' }}>
+        <div style={{ maxWidth: 840, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 28 }}>
+            <h2 style={{ fontSize: 'clamp(19px, 4vw, 25px)', fontWeight: 800, color: '#0f0b33', margin: '0 0 8px' }}>
+              Quais são os benefícios do aluguel de carro para motorista de aplicativo
+            </h2>
+            <p style={{ fontSize: 13, color: '#64748b', maxWidth: 600, margin: '0 auto', lineHeight: 1.5 }}>
+              Alugar com a LM veículos para Apps é ter liberdade para dirigir e tranquilidade para planejar o futuro. Aqui, você não se preocupa com burocracia, custos fixos ou manutenção, só com o seu ganho.
+            </p>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {BENEFICIOS_ITEMS.map((b, idx) => (
+              <div 
+                key={idx}
+                style={{
+                  background: '#ffffff',
+                  border: '1px solid #E6EBED',
+                  borderRadius: 10,
+                  padding: '16px 18px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 16
+                }}
+              >
+                <img src={b.icon} alt="" style={{ width: 34, height: 'auto', flexShrink: 0 }} />
+                <div>
+                  <h3 style={{ fontSize: 14, fontWeight: 800, color: '#0f0b33', margin: '0 0 4px' }}>
+                    {b.title}
+                  </h3>
+                  <p style={{ fontSize: 12, color: '#64748b', margin: 0, lineHeight: 1.4 }}>
+                    {b.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== SECTION FAQ ===== */}
+      <section style={{ padding: '40px 16px', maxWidth: 840, margin: '0 auto' }}>
+        <h2 style={{ fontSize: 'clamp(19px, 4vw, 25px)', fontWeight: 800, color: '#0f0b33', textAlign: 'center', margin: '0 0 8px' }}>
+          Aluguel de carro para motorista de aplicativo: dúvidas frequentes
+        </h2>
+        <p style={{ fontSize: 13, color: '#64748b', textAlign: 'center', maxWidth: 620, margin: '0 auto 24px', lineHeight: 1.5 }}>
+          Quem trabalha com aplicativo sabe que tempo é dinheiro. Por isso, reunimos respostas diretas para ajudar você a entender como o aluguel da LM funciona.
+        </p>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {FAQS_ITEMS.map((faq, idx) => {
             const isOpen = openFaq === idx;
             return (
               <div 
                 key={idx}
                 style={{
-                  background: '#ffffff',
-                  border: '1px solid #e2e8f0',
-                  borderRadius: 14,
+                  border: '1px solid #E6EBED',
+                  borderRadius: 10,
                   overflow: 'hidden'
                 }}
               >
@@ -749,22 +841,22 @@ export default function Loja() {
                   onClick={() => setOpenFaq(isOpen ? null : idx)}
                   style={{
                     width: '100%',
-                    padding: '16px 18px',
+                    padding: '14px 16px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     gap: 12,
-                    background: 'transparent',
+                    background: '#ffffff',
                     border: 'none',
                     textAlign: 'left',
                     cursor: 'pointer'
                   }}
                 >
-                  <span style={{ fontSize: 15, fontWeight: 700, color: '#0f172a' }}>{faq.q}</span>
-                  {isOpen ? <ChevronUp size={20} color="#0000ff" /> : <ChevronDown size={20} color="#64748b" />}
+                  <span style={{ fontSize: 13, fontWeight: 700, color: '#0f0b33' }}>{faq.q}</span>
+                  {isOpen ? <ChevronUp size={18} color="#e0a203" /> : <ChevronDown size={18} color="#94a3b8" />}
                 </button>
                 {isOpen && (
-                  <div style={{ padding: '0 18px 18px', borderTop: '1px solid #f1f5f9', color: '#475569', fontSize: 14, lineHeight: 1.55 }}>
+                  <div style={{ padding: '0 16px 16px', fontSize: 13, color: '#475569', lineHeight: 1.5, borderTop: '1px solid #f1f5f9' }}>
                     {faq.a}
                   </div>
                 )}
@@ -775,37 +867,48 @@ export default function Loja() {
       </section>
 
       {/* ===== CENTRAL DE ATENDIMENTO BANNER ===== */}
-      <section style={{ maxWidth: 840, margin: '0 auto', padding: '0 16px 20px' }}>
-        <div style={{
-          background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
-          borderRadius: 20,
-          padding: '28px 20px',
-          color: '#ffffff',
-          textAlign: 'center'
-        }}>
-          <Phone size={32} color="#e0a203" style={{ marginBottom: 12 }} />
-          <h3 style={{ fontSize: 20, fontWeight: 800, marginBottom: 8 }}>Central de Atendimento ao Motorista</h3>
-          <p style={{ color: '#cbd5e1', fontSize: 14, maxWidth: 520, margin: '0 auto 16px', lineHeight: 1.5 }}>
-            Segunda a sexta-feira, das 7h às 18h. Atendimento 24h para assistência em caso de sinistro, furto ou roubo.
-          </p>
+      <section style={{ background: '#f1f1f1', padding: '34px 16px', borderTop: '1px solid #e2e8f0' }}>
+        <div style={{ maxWidth: 840, margin: '0 auto', textAlign: 'center' }}>
+          <h3 style={{ fontSize: 18, fontWeight: 800, color: '#0f0b33', marginBottom: 12 }}>
+            Central de Atendimento LM
+          </h3>
+
           <div style={{
             display: 'inline-flex',
             alignItems: 'center',
-            gap: 8,
-            background: 'rgba(255,255,255,0.1)',
-            border: '1px solid rgba(224,162,3,0.4)',
-            padding: '10px 20px',
+            gap: 10,
+            background: '#ffffff',
+            padding: '10px 24px',
             borderRadius: 30,
-            fontSize: 16,
-            fontWeight: 800,
-            color: '#e0a203'
+            border: '1px solid #cbd5e1',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+            marginBottom: 14
           }}>
-            📞 0800 075 5050
+            <span style={{ fontSize: 20 }}>📞</span>
+            <span style={{ fontSize: 16, fontWeight: 900, color: '#0f0b33' }}>0800 075 5050</span>
+          </div>
+
+          <p style={{ fontSize: 12, color: '#64748b', margin: '0 auto 10px', maxWidth: 500, lineHeight: 1.45 }}>
+            Segunda a sexta-feira, das 7h às 18h.<br />
+            Atendimento 24h para assistência, furto ou roubo.
+          </p>
+
+          <div style={{
+            fontSize: 11,
+            color: '#94a3b8',
+            maxWidth: 580,
+            margin: '14px auto 0',
+            background: '#ffffff',
+            padding: '10px 14px',
+            borderRadius: 8,
+            border: '1px solid #e2e8f0'
+          }}>
+            <strong>Atenção:</strong> Ao receber um boleto, verifique se o domínio do remetente termina em <strong>@lmmobilidade.com.br</strong> e se consta a razão social da LM como beneficiária do documento.
           </div>
         </div>
       </section>
 
-      {/* ===== MODAL DE RESERVA / PROPOSTA ===== */}
+      {/* ===== MODAL IN-APP: RESERVA DO CARRO (QUERO ALUGAR) ===== */}
       {selectedCar && (
         <div style={{
           position: 'fixed',
@@ -813,9 +916,9 @@ export default function Loja() {
           left: 0,
           right: 0,
           bottom: 0,
-          background: 'rgba(0,0,0,0.65)',
-          backdropFilter: 'blur(5px)',
-          zIndex: 9999,
+          background: 'rgba(0,0,0,0.7)',
+          backdropFilter: 'blur(4px)',
+          zIndex: 99999,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -823,170 +926,164 @@ export default function Loja() {
         }}>
           <div style={{
             background: '#ffffff',
-            borderRadius: 20,
+            borderRadius: 16,
             width: '100%',
-            maxWidth: 440,
-            maxHeight: '90vh',
+            maxWidth: 420,
+            maxHeight: '92vh',
             overflowY: 'auto',
             padding: '24px 20px',
             position: 'relative',
-            boxShadow: '0 20px 40px rgba(0,0,0,0.25)'
+            boxShadow: '0 20px 40px rgba(0,0,0,0.3)'
           }}>
             <button
               onClick={() => setSelectedCar(null)}
               style={{
                 position: 'absolute',
-                top: 16,
-                right: 16,
+                top: 14,
+                right: 14,
                 background: '#f1f5f9',
                 border: 'none',
                 borderRadius: '50%',
-                width: 32,
-                height: 32,
+                width: 30,
+                height: 30,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer'
               }}
             >
-              <X size={18} color="#475569" />
+              <X size={16} color="#475569" />
             </button>
 
-            {!formSubmitted ? (
+            {!formSent ? (
               <>
-                <div style={{ textAlign: 'center', marginBottom: 16 }}>
-                  <span style={{ background: '#e0a203', color: '#000', fontSize: 11, fontWeight: 800, padding: '3px 10px', borderRadius: 10, textTransform: 'uppercase' }}>
+                <div style={{ textAlign: 'center', marginBottom: 14 }}>
+                  <span style={{ background: '#e0a203', color: '#fff', fontSize: 11, fontWeight: 800, padding: '2px 10px', borderRadius: 4 }}>
                     {selectedCar.grupo}
                   </span>
-                  <h3 style={{ fontSize: 18, fontWeight: 800, color: '#0f172a', marginTop: 8 }}>
+                  <h3 style={{ fontSize: 17, fontWeight: 800, color: '#0f0b33', margin: '8px 0 4px' }}>
                     {selectedCar.nome}
                   </h3>
-                  <div style={{ fontSize: 18, fontWeight: 900, color: '#0000ff' }}>
+                  <div style={{ fontSize: 16, fontWeight: 900, color: '#d98e04' }}>
                     R$ {selectedCar.preco} <span style={{ fontSize: 12, color: '#64748b' }}>/ semana</span>
                   </div>
                 </div>
 
-                <img 
-                  src={selectedCar.imagem} 
-                  alt={selectedCar.nome}
-                  style={{ maxHeight: 110, margin: '0 auto 16px', display: 'block', objectFit: 'contain' }}
-                />
+                <div style={{ textAlign: 'center', marginBottom: 14 }}>
+                  <img 
+                    src={selectedCar.imagem} 
+                    alt={selectedCar.nome}
+                    style={{ maxHeight: 90, maxWidth: '100%', objectFit: 'contain' }}
+                  />
+                </div>
 
-                <form onSubmit={handleFormSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <form onSubmit={handleFormSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   <div>
-                    <label style={{ fontSize: 12, fontWeight: 700, color: '#334155', display: 'block', marginBottom: 4 }}>
-                      Seu Nome Completo
+                    <label style={{ fontSize: 11, fontWeight: 700, color: '#475569', display: 'block', marginBottom: 4 }}>
+                      Nome Completo
                     </label>
                     <input 
                       required
-                      type="text" 
-                      placeholder="Ex: João da Silva"
+                      type="text"
+                      placeholder="Ex: Carlos Eduardo"
                       value={formData.nome}
                       onChange={(e) => setFormData({...formData, nome: e.target.value})}
                       style={{
                         width: '100%',
-                        padding: '10px 14px',
-                        borderRadius: 10,
+                        padding: '9px 12px',
+                        borderRadius: 8,
                         border: '1px solid #cbd5e1',
-                        fontSize: 14,
+                        fontSize: 13,
                         outline: 'none'
                       }}
                     />
                   </div>
 
                   <div>
-                    <label style={{ fontSize: 12, fontWeight: 700, color: '#334155', display: 'block', marginBottom: 4 }}>
+                    <label style={{ fontSize: 11, fontWeight: 700, color: '#475569', display: 'block', marginBottom: 4 }}>
                       WhatsApp / Celular com DDD
                     </label>
                     <input 
                       required
-                      type="tel" 
-                      placeholder="Ex: (11) 99999-9999"
+                      type="tel"
+                      placeholder="Ex: (11) 98765-4321"
                       value={formData.telefone}
                       onChange={(e) => setFormData({...formData, telefone: e.target.value})}
                       style={{
                         width: '100%',
-                        padding: '10px 14px',
-                        borderRadius: 10,
+                        padding: '9px 12px',
+                        borderRadius: 8,
                         border: '1px solid #cbd5e1',
-                        fontSize: 14,
+                        fontSize: 13,
                         outline: 'none'
                       }}
                     />
                   </div>
 
                   <div>
-                    <label style={{ fontSize: 12, fontWeight: 700, color: '#334155', display: 'block', marginBottom: 4 }}>
-                      Sua Cidade / Região
+                    <label style={{ fontSize: 11, fontWeight: 700, color: '#475569', display: 'block', marginBottom: 4 }}>
+                      Cidade de Retirada
                     </label>
                     <input 
                       required
-                      type="text" 
-                      placeholder="Ex: São Paulo, Contagem, BH..."
+                      type="text"
+                      placeholder="Ex: São Paulo, Contagem, etc."
                       value={formData.cidade}
                       onChange={(e) => setFormData({...formData, cidade: e.target.value})}
                       style={{
                         width: '100%',
-                        padding: '10px 14px',
-                        borderRadius: 10,
+                        padding: '9px 12px',
+                        borderRadius: 8,
                         border: '1px solid #cbd5e1',
-                        fontSize: 14,
+                        fontSize: 13,
                         outline: 'none'
                       }}
                     />
-                  </div>
-
-                  <div style={{ background: '#f8fafc', padding: 10, borderRadius: 8, fontSize: 11, color: '#64748b' }}>
-                    🔒 Seus dados serão utilizados apenas por nossos consultores para envio da proposta oficial sem compromisso.
                   </div>
 
                   <button
                     type="submit"
                     style={{
-                      background: '#20B038',
+                      background: '#d98e04',
                       color: '#ffffff',
                       border: 'none',
                       padding: '12px',
-                      borderRadius: 12,
-                      fontSize: 14,
+                      borderRadius: 20,
+                      fontSize: 13,
                       fontWeight: 800,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: 8,
                       cursor: 'pointer',
                       marginTop: 6
                     }}
                   >
-                    <Send size={16} /> Enviar Pedido de Reserva
+                    Confirmar Solicitação de Aluguel
                   </button>
                 </form>
               </>
             ) : (
-              <div style={{ textAlign: 'center', padding: '20px 8px' }}>
-                <div style={{ width: 56, height: 56, borderRadius: '50%', background: '#dcfce7', color: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
-                  <Check size={32} />
+              <div style={{ textAlign: 'center', padding: '16px 6px' }}>
+                <div style={{ width: 48, height: 48, borderRadius: '50%', background: '#dcfce7', color: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+                  <Check size={28} />
                 </div>
-                <h3 style={{ fontSize: 20, fontWeight: 800, color: '#0f172a', marginBottom: 8 }}>
-                  Solicitação Recebida com Sucesso!
+                <h3 style={{ fontSize: 18, fontWeight: 800, color: '#0f0b33', marginBottom: 8 }}>
+                  Pedido Enviado com Sucesso!
                 </h3>
-                <p style={{ color: '#475569', fontSize: 14, lineHeight: 1.5, marginBottom: 20 }}>
-                  Olá <strong>{formData.nome || 'Motorista'}</strong>, recebemos seu interesse no <strong>{selectedCar.nome}</strong>. Nosso time de atendimento da LM entrará em contato pelo número informado para formalizar sua reserva!
+                <p style={{ color: '#475569', fontSize: 13, lineHeight: 1.5, marginBottom: 18 }}>
+                  Obrigado, <strong>{formData.nome || 'Motorista'}</strong>! Nossos consultores de atendimento para motoristas entrarão em contato no WhatsApp informado para agendar a retirada do seu <strong>{selectedCar.nome}</strong>.
                 </p>
                 <button
                   onClick={() => setSelectedCar(null)}
                   style={{
-                    background: '#0000ff',
+                    background: '#e0a203',
                     color: '#ffffff',
                     border: 'none',
-                    padding: '10px 24px',
+                    padding: '8px 24px',
                     borderRadius: 20,
-                    fontSize: 14,
+                    fontSize: 13,
                     fontWeight: 700,
                     cursor: 'pointer'
                   }}
                 >
-                  Concluir
+                  OK, fechar
                 </button>
               </div>
             )}
@@ -994,8 +1091,8 @@ export default function Loja() {
         </div>
       )}
 
-      {/* ===== MODAL DETALHES DE LOJA ===== */}
-      {selectedLojaModal && (
+      {/* ===== MODAL DE INFORMAÇÕES (SEM NAVEGAR PARA FORA) ===== */}
+      {activeModalInfo && (
         <div style={{
           position: 'fixed',
           top: 0,
@@ -1003,8 +1100,8 @@ export default function Loja() {
           right: 0,
           bottom: 0,
           background: 'rgba(0,0,0,0.65)',
-          backdropFilter: 'blur(5px)',
-          zIndex: 9999,
+          backdropFilter: 'blur(4px)',
+          zIndex: 99999,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -1012,57 +1109,51 @@ export default function Loja() {
         }}>
           <div style={{
             background: '#ffffff',
-            borderRadius: 20,
+            borderRadius: 16,
             width: '100%',
-            maxWidth: 420,
-            padding: '24px 20px',
-            position: 'relative'
+            maxWidth: 380,
+            padding: '22px 18px',
+            position: 'relative',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
           }}>
             <button
-              onClick={() => setSelectedLojaModal(null)}
+              onClick={() => setActiveModalInfo(null)}
               style={{
                 position: 'absolute',
-                top: 16,
-                right: 16,
+                top: 12,
+                right: 12,
                 background: '#f1f5f9',
                 border: 'none',
                 borderRadius: '50%',
-                width: 32,
-                height: 32,
+                width: 28,
+                height: 28,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer'
               }}
             >
-              <X size={18} color="#475569" />
+              <X size={16} color="#475569" />
             </button>
 
-            <h3 style={{ fontSize: 18, fontWeight: 800, color: '#0f172a', marginBottom: 12 }}>
-              {selectedLojaModal.nome}
+            <h3 style={{ fontSize: 16, fontWeight: 800, color: '#0f0b33', marginBottom: 10 }}>
+              {activeModalInfo.title}
             </h3>
 
-            <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 14 }}>
-              <MapPin size={20} color="#0000ff" style={{ flexShrink: 0, marginTop: 3 }} />
-              <p style={{ margin: 0, fontSize: 14, color: '#334155', lineHeight: 1.5 }}>
-                {selectedLojaModal.endereco}
-              </p>
-            </div>
-
-            <div style={{ background: '#f8fafc', padding: 12, borderRadius: 10, fontSize: 13, color: '#475569', marginBottom: 18 }}>
-              ⏰ Horário de funcionamento: {selectedLojaModal.horario}
-            </div>
+            <p style={{ fontSize: 13, color: '#475569', lineHeight: 1.5, whiteSpace: 'pre-line', marginBottom: 18 }}>
+              {activeModalInfo.content}
+            </p>
 
             <button
-              onClick={() => setSelectedLojaModal(null)}
+              onClick={() => setActiveModalInfo(null)}
               style={{
                 width: '100%',
-                background: '#0000ff',
+                background: '#e0a203',
                 color: '#ffffff',
                 border: 'none',
-                padding: '12px',
-                borderRadius: 12,
-                fontSize: 14,
+                padding: '10px',
+                borderRadius: 10,
+                fontSize: 13,
                 fontWeight: 700,
                 cursor: 'pointer'
               }}
