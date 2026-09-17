@@ -213,7 +213,7 @@ export default function Home() {
               , seminovo revisado ou gestão total da sua frota
             </p>
           </div>
-          <div className="list">
+          <div className="text-list-normal">
             {[
               ['01', 'Mobilidade sob medida', 'Planos e veículos personalizados para cada perfil e necessidade.'],
               ['02', 'Veículos sempre disponíveis', 'Carros revisados e prontos para rodar, onde e quando você precisar.'],
@@ -222,12 +222,9 @@ export default function Home() {
               ['05', 'Controle financeiro e transparência', 'Custos previsíveis e gestão clara para você ou sua empresa economizarem.'],
               ['06', 'Suporte 24 horas', 'Assistência em todo o país, garantindo segurança e tranquilidade na estrada.'],
             ].map(([num, title, desc]) => (
-              <div className="item" key={num}>
-                <div className="number"><span>{num}</span></div>
-                <div className="text">
-                  <h3>{title}</h3>
-                  <p>{desc}</p>
-                </div>
+              <div className="text-item-normal" key={num}>
+                <h3 className="text-item-title">{num}. {title}</h3>
+                <p className="text-item-desc">{desc}</p>
               </div>
             ))}
           </div>
