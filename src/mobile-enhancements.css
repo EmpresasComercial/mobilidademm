@@ -260,12 +260,7 @@ img, svg, picture {
 }
 
 .section-slide-home .swiper-slide .text {
-  position: absolute;
-  bottom: 36px;
-  left: 16px;
-  right: 16px;
-  color: #fff;
-  z-index: 10;
+  display: none;
 }
 
 .section-slide-home .swiper-slide .category small {
