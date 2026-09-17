@@ -102,13 +102,10 @@ export default function Home() {
             <div className="swiper-wrapper">
               {slides.map((s, index) =>
                 index === currentSlide ? (
-                  <a
+                  <div
                     key={index}
-                    href={s.link}
                     className="swiper-slide"
                     title={s.title}
-                    target="_blank"
-                    rel="noreferrer"
                     style={{ color: s.color }}
                   >
                     <div
@@ -125,7 +122,7 @@ export default function Home() {
                         <div data-button><span>{s.buttonText}</span></div>
                       </div>
                     </div>
-                  </a>
+                  </div>
                 ) : null
               )}
             </div>
@@ -159,15 +156,13 @@ export default function Home() {
       {/* ===== SECTION 2: BANNER LIBRAS ===== */}
       <section className="section-image-responsive-model">
         <div className="container">
-          <a href="https://lmmobilidade.com.br/atendimento-em-libras/" target="_blank" rel="noreferrer">
-            <picture className="image">
-              <img
-                src="https://lmmobilidade.com.br/wp-content/uploads/2026/07/Banner-1370x415_comtexto-768x233.jpg"
-                alt="Atendimento em Libras - LM Mobilidade"
-                style={{ width:'100%', height:'auto', display:'block', borderRadius:12 }}
-              />
-            </picture>
-          </a>
+          <picture className="image">
+            <img
+              src="https://lmmobilidade.com.br/wp-content/uploads/2026/07/Banner-1370x415_comtexto-768x233.jpg"
+              alt="Atendimento em Libras - LM Mobilidade"
+              style={{ width:'100%', height:'auto', display:'block', borderRadius:12 }}
+            />
+          </picture>
         </div>
       </section>
 
@@ -193,9 +188,9 @@ export default function Home() {
                 alt="Mapa de onde encontrar os escritórios comerciais LM Mobilidade no Brasil"
               />
             </div>
-            <a className="button" href="https://lmmobilidade.com.br/onde-estamos/" title="Todas as unidades" data-button="current">
+            <span className="button" title="Todas as unidades" data-button="current" style={{ cursor:'default' }}>
               <span>Todas as unidades</span>
-            </a>
+            </span>
           </div>
         </div>
       </section>
@@ -206,11 +201,7 @@ export default function Home() {
           <div className="box-title">
             <h2 className="title">Você no controle da sua mobilidade</h2>
             <p className="subtitle">
-              Escolha entre{' '}
-              <a href="https://lmmobilidade.com.br/lmassinecar/" title="carro por assinatura - LM Assine Car" target="_blank" rel="noreferrer">
-                carro por assinatura
-              </a>
-              , seminovo revisado ou gestão total da sua frota
+              Escolha entre carro por assinatura, seminovo revisado ou gestão total da sua frota
             </p>
           </div>
           <div className="text-list-normal">
@@ -340,12 +331,7 @@ export default function Home() {
                 <div key={i} style={{ display:'flex', gap:10, alignItems:'center', marginBottom:12 }}>
                   <p style={{ margin:0, fontWeight:700, minWidth:130, color:'#0000ff' }}>{c.label}</p>
                   <p style={{ margin:0 }}>
-                    <a
-                      style={{ display:'flex', gap:10, alignItems:'center', color:'inherit', textDecoration:'none' }}
-                      href={c.waLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                    <span style={{ display:'flex', gap:10, alignItems:'center', color:'inherit' }}>
                       <img
                         src="https://lmmobilidade.com.br/wp-content/themes/lmmobilidade-iwwa/img/icons/icon-phone-blue.svg"
                         alt="telefone"
@@ -357,7 +343,7 @@ export default function Home() {
                         alt="whatsapp"
                       />
                       <strong>{c.phone}</strong>
-                    </a>
+                    </span>
                   </p>
                 </div>
               ))}
@@ -375,9 +361,7 @@ export default function Home() {
 
               {/* Terceiros sinistro */}
               <p style={{ fontSize:12, marginTop:12, color:'#888' }}>
-                <a href="https://lmmobilidade.com.br/#contato-mobilidade-home" style={{ color:'#0000ff' }}>
-                  Clique aqui para Atendimento de Terceiros envolvidos em Sinistro.
-                </a>
+                Atendimento de Terceiros envolvidos em Sinistro: entre em contato por um dos canais acima.
               </p>
             </div>
 
