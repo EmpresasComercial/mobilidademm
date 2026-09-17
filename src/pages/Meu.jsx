@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 
 /* ── Ícones customizados ── */
@@ -64,6 +65,7 @@ function IcEye({ hidden }) {
 }
 
 export default function Meu() {
+  const navigate = useNavigate();
   const [hideValues, setHideValues] = useState(false);
 
   const balances = [
@@ -96,14 +98,14 @@ export default function Meu() {
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 16px 16px 24px;
+          padding: 10px 16px 14px;
           box-sizing: border-box;
         }
         .meu-map-banner img {
           width: 100%;
-          max-width: 420px;
+          max-width: 250px;
           height: auto;
-          max-height: 380px;
+          max-height: 170px;
           object-fit: contain;
           display: block;
         }
@@ -142,7 +144,7 @@ export default function Meu() {
       {/* ── CONTAINER RESPONSIVO (se adapta como a Home: 1200px no Desktop, 100% no Mobile) ── */}
       <div className="meu-container">
         <div className="meu-grid">
-          
+
           {/* COLUNA ESQUERDA: PERFIL + SALDOS */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             {/* CARD PERFIL */}
@@ -184,7 +186,6 @@ export default function Meu() {
                 </svg>
               </button>
             </div>
-
             {/* CARDS SALDO */}
             <div style={{
               background: '#fff',
@@ -233,6 +234,12 @@ export default function Meu() {
               {menuItems.map(({ Icon, label }, i) => (
                 <button
                   key={i}
+                  onClick={() => {
+                    const lbl = label.toLowerCase();
+                    if (lbl === 'recarrega') navigate('/recarregar');
+                    if (lbl.includes('retirada') || lbl.includes('sacar') || lbl.includes('retirar')) navigate('/retirar');
+                    if (lbl.includes('convidar')) navigate('/equipe');
+                  }}
                   style={{
                     width: '100%',
                     background: 'none',

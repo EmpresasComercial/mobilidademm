@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Loader2 } from 'lucide-react';
+import { useProcessing } from '../context/ProcessingContext';
 
 const VEICULOS_APPS = [
   {
@@ -60,14 +62,45 @@ const VEICULOS_APPS = [
 ];
 
 export default function Produtos() {
-  const [rentedCarId, setRentedCarId] = useState(null);
+  const { startProcessing, isProcessing } = useProcessing();
+  const [rentingCarId, setRentingCarId] = useState(null);
 
   const handleRent = (car) => {
-    setRentedCarId(car.id);
-    setTimeout(() => {
-      alert(`Solicitação de aluguel para "${car.nome}" realizada com sucesso!`);
-      setRentedCarId(null);
-    }, 400);
+    setRentingCarId(car.id);
+    startProcessing({
+      title: 'Locação de Veículo',
+      itemInfo: {
+        title: car.nome,
+        subtitle: `R$ ${car.preco} / semana`,
+        image: car.imagem,
+        badge: car.grupo
+      },
+      steps: [
+        {
+          id: 1,
+          title: '1. Consulta de Disponibilidade',
+          activeText: 'Consultando pátios e disponibilidade na frota...',
+          doneText: 'Veículo localizado e disponível para locação.',
+        },
+        {
+          id: 2,
+          title: '2. Validação Cadastral & CNH',
+          activeText: 'Validando requisitos e habilitação para apps...',
+          doneText: 'Documentos e perfil aprovados com sucesso.',
+        },
+        {
+          id: 3,
+          title: '3. Processamento da Reserva',
+          activeText: 'Processando ordem e emitindo voucher no sistema...',
+          doneText: 'Reserva confirmada na base LM Mobilidade.',
+        }
+      ],
+      successTitle: 'Locação Pré-Reservada!',
+      successMessage: `O veículo ${car.nome} foi reservado com sucesso. Nossa equipe entrará em contato para agendar a entrega das chaves.`,
+      onComplete: () => {
+        setRentingCarId(null);
+      }
+    });
   };
 
   return (
@@ -80,9 +113,8 @@ export default function Produtos() {
           width: 100%;
         }
         .aluguel-hero {
-          background: #e0a203;
+          background: linear-gradient(135deg, #0d2350 0%, #0000ff 100%);
           padding: 30px 16px 24px;
-          border-bottom: 1px solid #d49800;
           text-align: center;
         }
         .aluguel-hero-inner {
@@ -104,7 +136,7 @@ export default function Produtos() {
         .aluguel-container {
           max-width: 900px;
           margin: 0 auto;
-          padding: 24px 16px;
+          padding: 20px 6px;
           box-sizing: border-box;
         }
         /* Layout vertical (lista) em vez de grid */
@@ -126,7 +158,7 @@ export default function Produtos() {
         }
         .car-card-list:hover {
           transform: translateY(-2px);
-          box-shadow: 0 6px 16px rgba(224, 162, 3, 0.15);
+          box-shadow: 0 6px 16px rgba(0, 0, 255, 0.12);
         }
         .car-img-wrap-list {
           width: 35%;
@@ -158,7 +190,7 @@ export default function Produtos() {
           position: absolute;
           top: 10px;
           left: 10px;
-          background: #e0a203;
+          background: #0000ff;
           color: #ffffff;
           font-size: 11px;
           font-weight: 700;
@@ -181,7 +213,7 @@ export default function Produtos() {
         .car-obs {
           font-size: 11px;
           font-weight: 600;
-          color: #e0a203;
+          color: #0000ff;
           margin-bottom: 12px;
         }
         .car-price-block {
@@ -215,14 +247,37 @@ export default function Produtos() {
           justify-content: center;
           gap: 6px;
           width: fit-content;
-          box-shadow: 0 2px 6px rgba(217, 142, 4, 0.3);
+          box-shadow: 0 4px 12px rgba(0, 0, 255, 0.25);
           transition: background 0.2s, transform 0.1s;
         }
         .car-btn-alugar:hover {
-          background: #c07d03;
+          background: #0000cc;
         }
         .car-btn-alugar:active {
           transform: scale(0.98);
+        }
+
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .spin-icon {
+          animation: spin 1s linear infinite;
+        }
+        @keyframes modalPop {
+          from { opacity: 0; transform: scale(0.92) translateY(16px); }
+          to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal-animated {
+          animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes pulseDot {
+          0% { transform: scale(0.95); opacity: 0.6; }
+          50% { transform: scale(1.15); opacity: 1; }
+          100% { transform: scale(0.95); opacity: 0.6; }
+        }
+        .pulse-dot {
+          animation: pulseDot 1.4s infinite;
         }
 
         /* Mobile Adjustments for the vertical list */
@@ -271,17 +326,24 @@ export default function Produtos() {
                   <div className="car-price-val">
                     <span>R$ {car.preco}</span> / semana
                   </div>
-                </div>
-
-                <button
+                  <button
                   className="car-btn-alugar"
                   onClick={() => handleRent(car)}
-                  disabled={rentedCarId === car.id}
+                  disabled={isProcessing && rentingCarId === car.id}
                 >
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.971.53 1.771.815 2.796.815 3.18 0 5.767-2.587 5.768-5.766.001-3.181-2.585-5.767-5.768-5.767zm0 10.455c-.947 0-1.637-.253-2.451-.737l-.175-.104-1.579.414.422-1.54-.113-.18c-.534-.849-.816-1.573-.815-2.542.001-2.583 2.103-4.685 4.711-4.685 2.583 0 4.685 2.102 4.686 4.711 0 2.584-2.103 4.683-4.711 4.683z" />
-                  </svg>
-                  <span>{rentedCarId === car.id ? 'Aguarde...' : 'Quero alugar'}</span>
+                  {isProcessing && rentingCarId === car.id ? (
+                    <>
+                      <Loader2 size={15} className="spin-icon" />
+                      <span>Processando...</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.971.53 1.771.815 2.796.815 3.18 0 5.767-2.587 5.768-5.766.001-3.181-2.585-5.767-5.768-5.768zm0 10.455c-.947 0-1.637-.253-2.451-.737l-.175-.104-1.579.414.422-1.54-.113-.18c-.534-.849-.816-1.573-.815-2.542.001-2.583 2.103-4.685 4.711-4.685 2.583 0 4.685 2.102 4.686 4.711 0 2.584-2.103 4.683-4.711 4.683z" />
+                      </svg>
+                      <span>Quero alugar</span>
+                    </>
+                  )}
                 </button>
               </div>
             </div>

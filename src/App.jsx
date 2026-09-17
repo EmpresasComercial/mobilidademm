@@ -5,23 +5,35 @@ import Home from './pages/Home';
 import QuemSomos from './pages/QuemSomos';
 import Meu from './pages/Meu';
 import Produtos from './pages/Produtos';
+import Recarregar from './pages/Recarregar';
+import Retirar from './pages/Retirar';
+import Equipe from './pages/Equipe';
+import { ProcessingProvider } from './context/ProcessingContext';
 
 import './mobile-enhancements.css';
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Layout>
+      <ProcessingProvider>
         <Routes>
-          <Route path="/" element={<Home />} />
-
-          <Route path="/quem-somos" element={<QuemSomos />} />
-          <Route path="/equipe" element={<QuemSomos />} />
-          <Route path="/meu" element={<Meu />} />
-          <Route path="/produtos" element={<Produtos />} />
-          <Route path="/aluguel" element={<Produtos />} />
+          <Route path="/recarregar" element={<Recarregar />} />
+          <Route path="/retirar" element={<Retirar />} />
+          <Route path="/retirada" element={<Retirar />} />
+          <Route path="*" element={
+            <Layout>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/quem-somos" element={<QuemSomos />} />
+                <Route path="/meu" element={<Meu />} />
+                <Route path="/produtos" element={<Produtos />} />
+                <Route path="/aluguel" element={<Produtos />} />
+                <Route path="/equipe" element={<Equipe />} />
+              </Routes>
+            </Layout>
+          } />
         </Routes>
-      </Layout>
+      </ProcessingProvider>
     </BrowserRouter>
   );
 }
