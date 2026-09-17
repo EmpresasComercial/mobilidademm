@@ -238,60 +238,64 @@ img, svg, picture {
 .section-slide-home .swiper-slide {
   display: block;
   position: relative;
-  min-height: 460px;
+  min-height: 260px;
   text-decoration: none;
 }
 
 .section-slide-home .swiper-slide .bg {
   width: 100%;
-  height: 460px;
+  height: 260px;
   background-size: cover;
   background-repeat: no-repeat;
+  background-position: center center;
   position: relative;
 }
 
+/* Overlay mais leve — melhora visibilidade no mobile */
 .section-slide-home .swiper-slide .bg::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, transparent 30%, rgba(0,0,0,0.72) 100%);
+  background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.55) 100%);
 }
 
 .section-slide-home .swiper-slide .text {
   position: absolute;
-  bottom: 60px;
-  left: 20px;
-  right: 20px;
+  bottom: 36px;
+  left: 16px;
+  right: 16px;
   color: #fff;
   z-index: 10;
 }
 
 .section-slide-home .swiper-slide .category small {
-  font-size: 11px;
+  font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   font-weight: 800;
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
 .section-slide-home .swiper-slide p {
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 800;
-  line-height: 1.2;
-  margin: 8px 0 20px;
+  line-height: 1.25;
+  margin: 6px 0 14px;
   color: #fff;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.3);
 }
 
 .section-slide-home .swiper-slide [data-button] {
   display: inline-block;
   background: #fff;
   color: #0000ff;
-  padding: 10px 24px;
+  padding: 8px 20px;
   border-radius: 30px;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
 /* Dots */
@@ -321,19 +325,19 @@ img, svg, picture {
   border-radius: 8px;
 }
 
-/* Arrows */
+/* Arrows — menores no mobile */
 .slide-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   z-index: 20;
-  width: 40px;
-  height: 40px;
-  background: rgba(0,0,0,0.35);
+  width: 30px;
+  height: 30px;
+  background: rgba(255,255,255,0.25);
   color: #fff;
   border: none;
   border-radius: 50%;
-  font-size: 28px;
+  font-size: 20px;
   line-height: 1;
   display: flex;
   align-items: center;
@@ -342,8 +346,32 @@ img, svg, picture {
   backdrop-filter: blur(4px);
 }
 
-.slide-arrow-prev { left: 10px; }
-.slide-arrow-next { right: 10px; }
+.slide-arrow-prev { left: 8px; }
+.slide-arrow-next { right: 8px; }
+
+/* Tablet e Desktop — slider maior */
+@media (min-width: 600px) {
+  .section-slide-home .swiper-slide {
+    min-height: 420px;
+  }
+  .section-slide-home .swiper-slide .bg {
+    height: 420px;
+  }
+  .section-slide-home .swiper-slide .text {
+    bottom: 56px;
+    left: 32px;
+    right: 32px;
+  }
+  .section-slide-home .swiper-slide p {
+    font-size: 28px;
+  }
+  .slide-arrow {
+    width: 40px;
+    height: 40px;
+    font-size: 28px;
+    background: rgba(0,0,0,0.3);
+  }
+}
 
 /* ---- BANNER LIBRAS ---- */
 .section-image-responsive-model {
