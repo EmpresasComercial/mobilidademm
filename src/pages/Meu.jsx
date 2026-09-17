@@ -187,10 +187,10 @@ export default function Meu() {
 
             {/* CARDS SALDO */}
             <div style={{
-              background: '#f5f0c0',
+              background: '#fff',
               borderRadius: 12,
               overflow: 'hidden',
-              border: '1px solid #e6e0a0',
+              border: '1px solid #e0e8f4',
               boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
             }}>
               {balances.map((item, i) => (
@@ -201,7 +201,7 @@ export default function Meu() {
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     padding: '14px 16px',
-                    borderBottom: i < balances.length - 1 ? '1px solid #e2da94' : 'none',
+                    borderBottom: i < balances.length - 1 ? '1px solid #e0e8f4' : 'none',
                   }}
                 >
                   <span style={{ fontSize: 14, color: '#333' }}>{item.label}</span>

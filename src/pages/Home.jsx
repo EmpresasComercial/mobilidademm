@@ -53,46 +53,46 @@ export default function Home() {
 
   return (
     <>
-      {/* ===== SECTION 1: SLIDE HOME ===== */}
-      <section className="section-slide-home">
-        <div className="slide">
-          <div className="swiper-container" style={{ position:'relative', overflow:'hidden' }}>
-            <div className="swiper-wrapper">
-              {slides.map((s, index) =>
-                index === currentSlide ? (
-                  <div
-                    key={index}
-                    className="swiper-slide"
-                    title={s.title}
-                    style={{ color: s.color }}
-                  >
-                    <div
-                      className="bg"
-                      style={{
-                        backgroundImage: `url(${s.bg})`,
-                        backgroundPosition: s.bgPos,
-                      }}
-                    />
-                  </div>
-                ) : null
-              )}
-            </div>
-
-            {/* Bullets */}
-            <div className="slider-bullets">
-              {slides.map((_, idx) => (
-                <div
-                  key={idx}
-                  className={`slider-bullet ${idx === currentSlide ? 'active' : ''}`}
-                  onClick={() => setCurrentSlide(idx)}
-                />
-              ))}
-            </div>
-
-            {/* Prev/Next arrows */}
-            
-            
-          </div>
+      {/* ===== SECTION 1: SLIDE HOME (NOVO CARROSSEL LIMPO) ===== */}
+      <section className="new-simple-carousel" style={{ position: 'relative', width: '100%', overflow: 'hidden', backgroundColor: '#f5f5f5' }}>
+        <div 
+          style={{
+            display: 'flex',
+            transition: 'transform 0.5s ease-in-out',
+            transform: `translateX(-${currentSlide * 100}%)`
+          }}
+        >
+          {slides.map((s, index) => (
+            <img 
+              key={index} 
+              src={s.bg}
+              alt="Slide"
+              style={{
+                minWidth: '100%',
+                height: 'auto',
+                display: 'block',
+                objectFit: 'contain'
+              }}
+            />
+          ))}
+        </div>
+        
+        {/* Bullets */}
+        <div style={{ position: 'absolute', bottom: '20px', left: '0', right: '0', display: 'flex', justifyContent: 'center', gap: '10px' }}>
+          {slides.map((_, idx) => (
+            <div
+              key={idx}
+              onClick={() => setCurrentSlide(idx)}
+              style={{
+                width: idx === currentSlide ? '24px' : '10px',
+                height: '10px',
+                borderRadius: '5px',
+                backgroundColor: idx === currentSlide ? '#fff' : 'rgba(255, 255, 255, 0.5)',
+                cursor: 'pointer',
+                transition: 'all 0.3s ease'
+              }}
+            />
+          ))}
         </div>
       </section>
 
@@ -107,6 +107,7 @@ export default function Home() {
               className="img-responsive"
               width="490" height="490"
               alt="Mapa de onde encontrar os escritórios comerciais LM Mobilidade no Brasil"
+              style={{ height: '14px', width: 'auto', objectFit: 'contain' }}
             />
           </div>
           <div className="text">
@@ -118,6 +119,7 @@ export default function Home() {
                 className="img-responsive"
                 width="490" height="490"
                 alt="Mapa de onde encontrar os escritórios comerciais LM Mobilidade no Brasil"
+                style={{ height: '14px', width: 'auto', objectFit: 'contain' }}
               />
             </div>
             <span className="button" title="Todas as unidades" data-button="current" style={{ cursor:'default' }}>
