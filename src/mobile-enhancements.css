@@ -238,13 +238,13 @@ img, svg, picture {
 .section-slide-home .swiper-slide {
   display: block;
   position: relative;
-  min-height: 260px;
+  min-height: 340px;
   text-decoration: none;
 }
 
 .section-slide-home .swiper-slide .bg {
   width: 100%;
-  height: 260px;
+  height: 340px;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
@@ -349,21 +349,21 @@ img, svg, picture {
 .slide-arrow-prev { left: 8px; }
 .slide-arrow-next { right: 8px; }
 
-/* Tablet e Desktop — slider maior */
+/* Tablet e Desktop */
 @media (min-width: 600px) {
   .section-slide-home .swiper-slide {
-    min-height: 320px;
+    min-height: 380px;
   }
   .section-slide-home .swiper-slide .bg {
-    height: 320px;
+    height: 380px;
   }
   .section-slide-home .swiper-slide .text {
-    bottom: 48px;
+    bottom: 50px;
     left: 32px;
     right: 32px;
   }
   .section-slide-home .swiper-slide p {
-    font-size: 22px;
+    font-size: 24px;
   }
   .slide-arrow {
     width: 40px;
