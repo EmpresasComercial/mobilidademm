@@ -90,16 +90,8 @@ export default function Home() {
             </div>
 
             {/* Prev/Next arrows */}
-            <button
-              className="slide-arrow slide-arrow-prev"
-              onClick={() => setCurrentSlide((p) => (p === 0 ? slides.length - 1 : p - 1))}
-              aria-label="anterior"
-            >&#8249;</button>
-            <button
-              className="slide-arrow slide-arrow-next"
-              onClick={() => setCurrentSlide((p) => (p + 1) % slides.length)}
-              aria-label="próximo"
-            >&#8250;</button>
+            
+            
           </div>
         </div>
       </section>

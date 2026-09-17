@@ -40,9 +40,7 @@ export default function Layout({ children }) {
               <a className="item" href="https://lmmobilidade.com.br/lmassinecar">
                 <img src="https://lmmobilidade.com.br/wp-content/uploads/sites/3/2022/08/LM_assine.svg" alt="LM AssineCar" width="149" height="30" />
               </a>
-              <Link className="item" to="/loja" onClick={() => setProductsMenuOpen(false)}>
-                <img src="https://lmmobilidade.com.br/wp-content/uploads/sites/4/2022/08/LM_apps.svg" alt="LM Apps" width="146" height="31" />
-              </Link>
+
               <a className="item" href="https://lmmobilidade.com.br/lmseminovos">
                 <img src="https://lmmobilidade.com.br/wp-content/uploads/sites/6/2023/01/Seminovos-cor.png" alt="LM Seminovos" width="150" height="28" />
               </a>
@@ -125,7 +123,7 @@ export default function Layout({ children }) {
                       <li className="lm-mobilidade"><a href="https://lmmobilidade.com.br">LM Mobilidade</a></li>
                       <li className="lm-frotas"><a href="https://lmmobilidade.com.br/lmfrotas">LM Frotas</a></li>
                       <li className="lm-assinecar"><a href="https://lmmobilidade.com.br/assinecarlm">LM AssineCar</a></li>
-                      <li className="lm-veículos-para-apps"><Link to="/loja">LM Veículos para Apps</Link></li>
+
                       <li className="lm-seminovos"><a href="https://lmmobilidade.com.br/lmseminovos">LM Seminovos</a></li>
                     </ul>
                   </li>
@@ -200,14 +198,7 @@ export default function Layout({ children }) {
           <Home size={22} />
           <span>página inicial</span>
         </Link>
-        <Link
-          to="/loja"
-          className={`app-tab-item ${location.pathname === '/loja' ? 'active' : ''}`}
-          onClick={() => window.scrollTo({ top:0, behavior:'smooth' })}
-        >
-          <Store size={22} />
-          <span>loja</span>
-        </Link>
+
         <Link
           to="/aluguel"
           className={`app-tab-item ${location.pathname === '/aluguel' || location.pathname === '/produtos' ? 'active' : ''}`}
