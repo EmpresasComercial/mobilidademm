@@ -6,55 +6,13 @@ export default function Home() {
 
   const slides = [
     {
-      title: 'LM Mobilidade',
-      category: 'LM Mobilidade',
-      text: 'Conectando você e seu negócio.',
-      buttonText: 'saiba mais',
-      color: '#0000ff',
-      link: 'https://lmmobilidade.com.br/nossa-historia/',
-      bg: 'https://lmmobilidade.com.br/wp-content/uploads/2022/08/lm-mobilidade-scaled.jpg',
-      bgPos: '60% center',
-    },
-    {
-      title: 'LM Frotas',
-      category: 'LM Frotas',
-      text: 'Soluções customizadas para a sua empresa.',
-      buttonText: 'conheça as vantagens',
-      color: '#5193cf',
-      link: 'https://lmmobilidade.com.br/lmfrotas',
-      bg: 'https://lmmobilidade.com.br/wp-content/uploads/2022/08/Design-sem-nome-2.jpg',
-      bgPos: '10% center',
-    },
-    {
-      title: 'LM AssineCar',
-      category: 'LM AssineCar',
-      text: 'Carro por assinatura: simples, prático e sem burocracia.',
-      buttonText: 'escolha seu plano',
-      color: '#9a39d3',
-      link: 'https://lmmobilidade.com.br/lmassinecar',
-      bg: 'https://lmmobilidade.com.br/wp-content/uploads/2022/08/lm-assinecar.jpg',
+      bg: 'https://lmmobilidade.com.br/wp-content/uploads/2026/07/Banner-1370x415_comtexto-768x233.jpg',
       bgPos: 'center center',
     },
     {
-      title: 'LM Seminovos',
-      category: 'LM Seminovos',
-      text: 'Seminovos revisados, com garantia e procedência.',
-      buttonText: 'ver estoque',
-      color: '#d5246c',
-      link: 'https://lmmobilidade.com.br/lmseminovos/',
-      bg: 'https://lmmobilidade.com.br/wp-content/uploads/2022/08/lm-seminovos-scaled.jpg',
+      bg: 'https://lmmobilidade.com.br/lmveiculosapps/wp-content/uploads/sites/4/2026/04/apps1.png',
       bgPos: 'center center',
-    },
-    {
-      title: 'LM Veículos para APPs',
-      category: 'LM Veículos para APPs',
-      text: 'Acelere seus ganhos com planos especiais para motoristas de app.',
-      buttonText: 'alugar agora',
-      color: '#e0a203',
-      link: 'https://lmmobilidade.com.br/lmveiculosapps/',
-      bg: 'https://lmmobilidade.com.br/wp-content/uploads/2022/08/lm-apps-scaled.jpg',
-      bgPos: 'center center',
-    },
+    }
   ];
 
   useEffect(() => {
@@ -146,18 +104,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== SECTION 2: BANNER LIBRAS ===== */}
-      <section className="section-image-responsive-model">
-        <div className="container">
-          <picture className="image">
-            <img
-              src="https://lmmobilidade.com.br/wp-content/uploads/2026/07/Banner-1370x415_comtexto-768x233.jpg"
-              alt="Atendimento em Libras - LM Mobilidade"
-              style={{ width:'100%', height:'auto', display:'block', borderRadius:12 }}
-            />
-          </picture>
-        </div>
-      </section>
+
 
       {/* ===== SECTION 3: ONDE ESTAMOS ===== */}
       <section className="section-map-model" id="unidades-mobilidade">
