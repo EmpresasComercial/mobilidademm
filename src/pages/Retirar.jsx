@@ -274,4 +274,37 @@ export default function Retirar() {
                   borderRadius: 0,
                   fontSize: 16,
                   fontWeight: 700,
-                  cursor: (!valor |
+                  cursor: (!valor || numValor <= 0 || saldoInsuficiente) ? 'not-allowed' : 'pointer',
+                  transition: 'background 0.2s ease',
+                  marginBottom: 20
+                }}
+              >
+                Confirmar Retirada
+              </button>
+
+              {/* INFORMAÇÕES SOBRE A RETIRADA (COMO ÚLTIMO ITEM) */}
+              <div
+                style={{
+                  background: '#eff6ff',
+                  borderRadius: 10,
+                  padding: '14px 16px',
+                  border: '1px solid #dbeafe'
+                }}
+              >
+                <div style={{ fontSize: 13, fontWeight: 700, color: '#1e40af', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <ShieldCheck size={16} /> Informações sobre a Retirada
+                </div>
+                <ul style={{ margin: 0, paddingLeft: 18, fontSize: 12, color: '#3b82f6', lineHeight: 1.6 }}>
+                  <li><strong>Valor mínimo:</strong> 1.000,00 Kz</li>
+                  <li><strong>Taxa de processamento:</strong> 0% (Gratuito)</li>
+                  <li><strong>Prazo estimado:</strong> Até 24 horas úteis</li>
+                  <li>O valor será creditado na conta bancária previamente vinculada.</li>
+                </ul>
+              </div>
+            </form>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

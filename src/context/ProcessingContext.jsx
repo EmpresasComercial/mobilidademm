@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useRef } from 'react';
-import { Search, ShieldCheck, CheckCircle2, Loader2, X, Car, ArrowRight } from 'lucide-react';
+import { Search, ShieldCheck, CheckCircle2, Loader2, X, Car, Check, Calendar, FileText } from 'lucide-react';
 
 const ProcessingContext = createContext({
   startProcessing: () => {},
@@ -10,34 +10,12 @@ const ProcessingContext = createContext({
 export function ProcessingProvider({ children }) {
   const [isOpen, setIsOpen] = useState(false);
   const [stage, setStage] = useState(1); // 1: Consulta, 2: Validação, 3: Processamento, 4: Concluído
+  const [protocol, setProtocol] = useState('');
   const [config, setConfig] = useState({
-    title: 'Processamento de Solicitação',
+    title: 'Solicitação de Locação',
     itemInfo: null, // { title, subtitle, image, badge }
-    steps: [
-      {
-        id: 1,
-        title: '1. Consulta de Disponibilidade',
-        activeText: 'Consultando disponibilidade nos sistemas...',
-        doneText: 'Consulta realizada com sucesso.',
-        icon: Search
-      },
-      {
-        id: 2,
-        title: '2. Validação Cadastral & Segurança',
-        activeText: 'Validando requisitos, segurança e cadastro...',
-        doneText: 'Validação e requisitos aprovados.',
-        icon: ShieldCheck
-      },
-      {
-        id: 3,
-        title: '3. Processamento da Operação',
-        activeText: 'Processando solicitação e gerando registros...',
-        doneText: 'Solicitação processada com êxito.',
-        icon: Loader2
-      }
-    ],
-    successTitle: 'Operação Confirmada!',
-    successMessage: 'Sua solicitação foi processada com sucesso no sistema.',
+    successTitle: 'Reserva Confirmada!',
+    successMessage: 'Sua solicitação foi concluída com sucesso. Nossa equipe entrará em contato para os detalhes da retirada.',
     onComplete: null,
   });
 
@@ -51,55 +29,37 @@ export function ProcessingProvider({ children }) {
   const startProcessing = (customConfig = {}) => {
     clearAllTimers();
 
-    const mergedConfig = {
-      title: customConfig.title || 'Processamento de Solicitação',
-      itemInfo: customConfig.itemInfo || null,
-      steps: customConfig.steps || [
-        {
-          id: 1,
-          title: customConfig.step1Title || '1. Consulta de Dados',
-          activeText: customConfig.step1Active || 'Consultando bases e disponibilidade no sistema...',
-          doneText: customConfig.step1Done || 'Consulta realizada e dados encontrados.',
-          icon: Search
-        },
-        {
-          id: 2,
-          title: customConfig.step2Title || '2. Validação Cadastral',
-          activeText: customConfig.step2Active || 'Validando requisitos e autorização de segurança...',
-          doneText: customConfig.step2Done || 'Validação concluída e perfil aprovado.',
-          icon: ShieldCheck
-        },
-        {
-          id: 3,
-          title: customConfig.step3Title || '3. Processamento da Solicitação',
-          activeText: customConfig.step3Active || 'Processando e gravando registros na rede LM...',
-          doneText: customConfig.step3Done || 'Operação processada e confirmada.',
-          icon: Loader2
-        }
-      ],
-      successTitle: customConfig.successTitle || 'Solicitação Concluída!',
-      successMessage: customConfig.successMessage || 'A sua operação foi realizada com sucesso.',
-      onComplete: customConfig.onComplete || null,
-    };
+    const randomProto = 'LM-' + Math.floor(100000 + Math.random() * 900000);
+    setProtocol(randomProto);
 
-    setConfig(mergedConfig);
+    setConfig({
+      title: customConfig.title || 'Solicitação de Locação',
+      itemInfo: customConfig.itemInfo || null,
+      successTitle: customConfig.successTitle || 'Reserva Confirmada!',
+      successMessage: customConfig.successMessage || 'Sua solicitação foi aprovada com sucesso no sistema.',
+      onComplete: customConfig.onComplete || null,
+    });
+
     setStage(1);
     setIsOpen(true);
 
+    // Etapa 1: Consulta (0 -> 1.3s)
     const t1 = setTimeout(() => {
       setStage(2);
     }, 1300);
 
+    // Etapa 2: Validação (1.3s -> 2.8s)
     const t2 = setTimeout(() => {
       setStage(3);
     }, 2800);
 
+    // Etapa 3: Processamento (2.8s -> 4.4s)
     const t3 = setTimeout(() => {
       setStage(4);
-      if (typeof mergedConfig.onComplete === 'function') {
-        mergedConfig.onComplete();
+      if (typeof customConfig.onComplete === 'function') {
+        customConfig.onComplete();
       }
-    }, 4500);
+    }, 4400);
 
     timersRef.current = [t1, t2, t3];
   };
@@ -114,14 +74,14 @@ export function ProcessingProvider({ children }) {
     <ProcessingContext.Provider value={{ startProcessing, closeProcessing, isProcessing: isOpen, stage }}>
       {children}
 
-      {/* ===== MODAL GLOBAL DE PROCESSAMENTO ===== */}
+      {/* ===== MODAL GLOBAL REESTRUTURADO & PREMIUM ===== */}
       {isOpen && (
         <div style={{
           position: 'fixed',
           inset: 0,
-          background: 'rgba(10, 18, 38, 0.78)',
-          backdropFilter: 'blur(7px)',
-          WebkitBackdropFilter: 'blur(7px)',
+          background: 'rgba(8, 14, 30, 0.72)',
+          backdropFilter: 'blur(8px)',
+          WebkitBackdropFilter: 'blur(8px)',
           zIndex: 99999,
           display: 'flex',
           alignItems: 'center',
@@ -131,213 +91,325 @@ export function ProcessingProvider({ children }) {
         }}>
           <div style={{
             background: '#ffffff',
-            borderRadius: 20,
+            borderRadius: 22,
             width: '100%',
-            maxWidth: 420,
-            padding: '24px 20px',
-            boxShadow: '0 24px 60px rgba(0, 0, 80, 0.35)',
+            maxWidth: 400,
+            boxShadow: '0 25px 60px -15px rgba(0, 0, 70, 0.35)',
             border: '1px solid #e2e8f0',
             position: 'relative',
-            animation: 'globalModalFade 0.28s ease-out'
+            overflow: 'hidden',
+            animation: 'modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards'
           }}>
-            {/* Styles inline para o modal */}
             <style>{`
-              @keyframes globalSpin {
+              @keyframes modalSlideUp {
+                from { opacity: 0; transform: scale(0.94) translateY(16px); }
+                to { opacity: 1; transform: scale(1) translateY(0); }
+              }
+              @keyframes spin {
                 from { transform: rotate(0deg); }
                 to { transform: rotate(360deg); }
               }
-              .global-spin-icon {
-                animation: globalSpin 1s linear infinite;
+              .spin-loader {
+                animation: spin 1.2s linear infinite;
               }
-              @keyframes globalModalFade {
-                from { opacity: 0; transform: scale(0.93) translateY(14px); }
-                to { opacity: 1; transform: scale(1) translateY(0); }
+              @keyframes checkScale {
+                0% { transform: scale(0.6); opacity: 0; }
+                50% { transform: scale(1.15); }
+                100% { transform: scale(1); opacity: 1; }
               }
-              @keyframes globalPulse {
-                0% { opacity: 0.5; transform: scale(0.95); }
-                50% { opacity: 1; transform: scale(1.1); }
-                100% { opacity: 0.5; transform: scale(0.95); }
-              }
-              .global-pulse {
-                animation: globalPulse 1.4s infinite;
+              .check-pop {
+                animation: checkScale 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
               }
             `}</style>
 
-            {/* Header com botão fechar */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-              <div>
-                <span style={{ fontSize: 11, fontWeight: 800, color: '#0000ff', textTransform: 'uppercase', letterSpacing: '0.8px', display: 'block' }}>
-                  LM Mobilidade
-                </span>
-                <h3 style={{ margin: '2px 0 0', fontSize: 17, fontWeight: 800, color: '#0f172a' }}>
-                  {config.title}
-                </h3>
-              </div>
-              <button
-                type="button"
-                onClick={closeProcessing}
-                style={{
-                  background: '#f1f5f9',
-                  border: 'none',
-                  borderRadius: '50%',
-                  width: 32,
-                  height: 32,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#64748b'
-                }}
-              >
-                <X size={18} />
-              </button>
-            </div>
-
-            {/* Barra de progresso de carregamento */}
-            <div style={{ background: '#f1f5f9', borderRadius: 10, height: 6, width: '100%', overflow: 'hidden', marginBottom: 20 }}>
-              <div style={{
-                height: '100%',
-                width: stage === 1 ? '25%' : stage === 2 ? '60%' : stage === 3 ? '85%' : '100%',
-                background: stage === 4 ? '#10b981' : 'linear-gradient(90deg, #0000ff, #3b82f6)',
-                borderRadius: 10,
-                transition: 'all 0.4s ease'
-              }} />
-            </div>
-
-            {/* Resumo do Item (quando aplicável) */}
-            {config.itemInfo && (
-              <div style={{
-                background: '#f8fafc',
-                border: '1px solid #e2e8f0',
-                borderRadius: 12,
-                padding: '10px 14px',
+            {/* BOTÃO FECHAR NO CANTO SUPERIOR */}
+            <button
+              type="button"
+              onClick={closeProcessing}
+              style={{
+                position: 'absolute',
+                top: 14,
+                right: 14,
+                background: '#f1f5f9',
+                border: 'none',
+                borderRadius: '50%',
+                width: 30,
+                height: 30,
+                cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                gap: 12,
-                marginBottom: 20
-              }}>
-                {config.itemInfo.image && (
-                  <img src={config.itemInfo.image} alt={config.itemInfo.title} style={{ width: 64, height: 40, objectFit: 'contain' }} />
-                )}
-                <div style={{ flex: 1 }}>
-                  {config.itemInfo.badge && (
-                    <span style={{ fontSize: 11, color: '#0000ff', fontWeight: 700 }}>{config.itemInfo.badge}</span>
-                  )}
-                  <div style={{ fontSize: 14, fontWeight: 800, color: '#0f172a' }}>
-                    {config.itemInfo.title}
-                  </div>
-                  {config.itemInfo.subtitle && (
-                    <div style={{ fontSize: 12, color: '#64748b', fontWeight: 500 }}>
-                      {config.itemInfo.subtitle}
-                    </div>
-                  )}
+                justifyContent: 'center',
+                color: '#64748b',
+                zIndex: 10,
+                transition: 'background 0.2s'
+              }}
+            >
+              <X size={16} />
+            </button>
+
+            {/* ========================================================= */}
+            {/* ESTADO 1: PROCESSAMENTO EM ANDAMENTO (STAGES 1, 2 e 3)     */}
+            {/* ========================================================= */}
+            {stage < 4 ? (
+              <div style={{ padding: '26px 20px 24px' }}>
+                {/* Cabeçalho */}
+                <div style={{ textAlign: 'center', marginBottom: 20 }}>
+                  <span style={{ fontSize: 11, fontWeight: 800, color: '#0000ff', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                    LM Mobilidade
+                  </span>
+                  <h3 style={{ margin: '4px 0 0', fontSize: 18, fontWeight: 800, color: '#0f172a' }}>
+                    {config.title}
+                  </h3>
                 </div>
-              </div>
-            )}
 
-            {/* 3 Etapas Globais: Consulta, Validação, Processamento */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20 }}>
-              {config.steps.map((step) => {
-                const isCurrent = stage === step.id;
-                const isDone = stage > step.id;
-                const isPending = stage < step.id;
-                const StepIcon = step.icon || Search;
+                {/* Veículo / Item em destaque */}
+                {config.itemInfo && (
+                  <div style={{
+                    background: '#f8fafc',
+                    border: '1px solid #e2e8f0',
+                    borderRadius: 14,
+                    padding: '12px 14px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 12,
+                    marginBottom: 24
+                  }}>
+                    {config.itemInfo.image && (
+                      <img src={config.itemInfo.image} alt={config.itemInfo.title} style={{ width: 68, height: 42, objectFit: 'contain' }} />
+                    )}
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 13, fontWeight: 800, color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {config.itemInfo.title}
+                      </div>
+                      {config.itemInfo.subtitle && (
+                        <div style={{ fontSize: 12, color: '#0000ff', fontWeight: 700, marginTop: 2 }}>
+                          {config.itemInfo.subtitle}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
 
-                return (
-                  <div
-                    key={step.id}
-                    style={{
-                      padding: '12px 14px',
-                      borderRadius: 12,
-                      border: isCurrent ? '1.5px solid #93c5fd' : isDone ? '1.5px solid #bbf7d0' : '1px solid #e2e8f0',
-                      background: isCurrent ? '#eff6ff' : isDone ? '#f0fdf4' : '#fafafa',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 12,
-                      transition: 'all 0.3s ease'
-                    }}
-                  >
+                {/* Círculo central animado de progresso */}
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '10px 0 20px'
+                }}>
+                  <div style={{ position: 'relative', width: 64, height: 64, marginBottom: 14 }}>
                     <div style={{
-                      width: 34,
-                      height: 34,
-                      borderRadius: 10,
-                      background: isCurrent ? '#dbeafe' : isDone ? '#dcfce7' : '#f1f5f9',
+                      position: 'absolute',
+                      inset: 0,
+                      borderRadius: '50%',
+                      border: '3px solid #e2e8f0'
+                    }} />
+                    <div style={{
+                      position: 'absolute',
+                      inset: 0,
+                      borderRadius: '50%',
+                      border: '3px solid #0000ff',
+                      borderTopColor: 'transparent',
+                      animation: 'spin 1s linear infinite'
+                    }} />
+                    <div style={{
+                      position: 'absolute',
+                      inset: 0,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      color: isCurrent ? '#0000ff' : isDone ? '#16a34a' : '#94a3b8',
-                      flexShrink: 0
+                      color: '#0000ff',
+                      fontSize: 13,
+                      fontWeight: 800
                     }}>
-                      {isCurrent ? (
-                        <Loader2 size={18} className="global-spin-icon" />
-                      ) : isDone ? (
-                        <CheckCircle2 size={18} />
-                      ) : (
-                        <StepIcon size={18} />
-                      )}
-                    </div>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span style={{ fontSize: 13, fontWeight: 700, color: isCurrent ? '#0000ff' : isDone ? '#166534' : '#64748b' }}>
-                          {step.title}
-                        </span>
-                        <span style={{ fontSize: 11, fontWeight: 700, color: isCurrent ? '#0000ff' : isDone ? '#16a34a' : '#94a3b8' }}>
-                          {isCurrent ? 'Em andamento...' : isDone ? 'Concluído' : 'Aguardando'}
-                        </span>
-                      </div>
-                      <p style={{ margin: '2px 0 0', fontSize: 11, color: isCurrent || isDone ? '#475569' : '#94a3b8', lineHeight: 1.4 }}>
-                        {isDone ? step.doneText : isCurrent ? step.activeText : 'Pendente de processamento...'}
-                      </p>
+                      {stage === 1 ? '35%' : stage === 2 ? '70%' : '95%'}
                     </div>
                   </div>
-                );
-              })}
-            </div>
 
-            {/* Ação e Conclusão */}
-            {stage === 4 ? (
-              <div style={{ animation: 'globalModalFade 0.3s ease' }}>
-                <div style={{
-                  background: '#f0fdf4',
-                  border: '1px solid #bbf7d0',
-                  borderRadius: 12,
-                  padding: '14px',
-                  marginBottom: 16,
-                  textAlign: 'center'
-                }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: '#16a34a', fontWeight: 800, fontSize: 15 }}>
-                    <CheckCircle2 size={20} />
-                    <span>{config.successTitle}</span>
+                  {/* Texto da etapa atual */}
+                  <div style={{ textAlign: 'center' }}>
+                    <span style={{
+                      display: 'inline-block',
+                      background: '#eff6ff',
+                      color: '#0000ff',
+                      fontSize: 12,
+                      fontWeight: 700,
+                      padding: '4px 12px',
+                      borderRadius: 20,
+                      marginBottom: 6
+                    }}>
+                      {stage === 1 && '1. Consulta na Frota'}
+                      {stage === 2 && '2. Validação Cadastral'}
+                      {stage === 3 && '3. Processamento'}
+                    </span>
+                    <p style={{ margin: 0, fontSize: 13, color: '#475569', fontWeight: 500 }}>
+                      {stage === 1 && 'Verificando disponibilidade nos pátios mais próximos...'}
+                      {stage === 2 && 'Validando documentação e elegibilidade para apps...'}
+                      {stage === 3 && 'Emitindo ordem e registrando a reserva no sistema...'}
+                    </p>
                   </div>
-                  <p style={{ margin: '6px 0 0', fontSize: 12, color: '#166534', lineHeight: 1.4 }}>
+                </div>
+
+                {/* Stepper horizontal moderno e limpo (sem caixas gigantes) */}
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '12px 16px',
+                  background: '#f8fafc',
+                  borderRadius: 12,
+                  border: '1px solid #e2e8f0'
+                }}>
+                  {[
+                    { num: 1, label: 'Consulta' },
+                    { num: 2, label: 'Validação' },
+                    { num: 3, label: 'Reserva' }
+                  ].map((s, idx) => {
+                    const isDone = stage > s.num;
+                    const isCurrent = stage === s.num;
+
+                    return (
+                      <React.Fragment key={s.num}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <div style={{
+                            width: 22,
+                            height: 22,
+                            borderRadius: '50%',
+                            background: isDone ? '#10b981' : isCurrent ? '#0000ff' : '#cbd5e1',
+                            color: '#ffffff',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: 11,
+                            fontWeight: 800,
+                            transition: 'all 0.3s ease'
+                          }}>
+                            {isDone ? <Check size={13} strokeWidth={3} /> : s.num}
+                          </div>
+                          <span style={{
+                            fontSize: 11,
+                            fontWeight: isCurrent || isDone ? 700 : 500,
+                            color: isDone ? '#059669' : isCurrent ? '#0000ff' : '#94a3b8'
+                          }}>
+                            {s.label}
+                          </span>
+                        </div>
+                        {idx < 2 && (
+                          <div style={{
+                            flex: 1,
+                            height: 2,
+                            margin: '0 8px',
+                            background: stage > idx + 1 ? '#10b981' : '#e2e8f0',
+                            transition: 'background 0.3s ease'
+                          }} />
+                        )}
+                      </React.Fragment>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : (
+              /* ========================================================= */
+              /* ESTADO 2: CONFIRMAÇÃO / COMPROVANTE (STAGE 4)            */
+              /* ========================================================= */
+              <div style={{ padding: '30px 22px 24px' }}>
+                {/* Ícone de Sucesso animado */}
+                <div style={{ textAlign: 'center', marginBottom: 16 }}>
+                  <div className="check-pop" style={{
+                    width: 58,
+                    height: 58,
+                    borderRadius: '50%',
+                    background: 'linear-gradient(135deg, #10b981, #059669)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#fff',
+                    boxShadow: '0 8px 24px rgba(16, 185, 129, 0.35)',
+                    marginBottom: 12
+                  }}>
+                    <CheckCircle2 size={32} strokeWidth={2.5} />
+                  </div>
+                  <h3 style={{ margin: '0 0 6px', fontSize: 20, fontWeight: 900, color: '#0f172a' }}>
+                    {config.successTitle}
+                  </h3>
+                  <p style={{ margin: 0, fontSize: 13, color: '#64748b', lineHeight: 1.5 }}>
                     {config.successMessage}
                   </p>
                 </div>
 
+                {/* Voucher / Comprovante elegante */}
+                <div style={{
+                  background: '#f8fafc',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: 16,
+                  padding: '16px',
+                  marginBottom: 20
+                }}>
+                  {config.itemInfo && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, paddingBottom: 12, borderBottom: '1px dashed #cbd5e1', marginBottom: 12 }}>
+                      {config.itemInfo.image && (
+                        <img src={config.itemInfo.image} alt={config.itemInfo.title} style={{ width: 64, height: 40, objectFit: 'contain' }} />
+                      )}
+                      <div>
+                        <span style={{ fontSize: 10, fontWeight: 800, color: '#0000ff', textTransform: 'uppercase' }}>
+                          {config.itemInfo.badge || 'LM Frota'}
+                        </span>
+                        <div style={{ fontSize: 14, fontWeight: 800, color: '#0f172a' }}>
+                          {config.itemInfo.title}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Linhas de detalhes do comprovante */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+                      <span style={{ color: '#64748b' }}>Protocolo:</span>
+                      <span style={{ fontWeight: 800, color: '#0f172a', fontFamily: 'monospace' }}>{protocol}</span>
+                    </div>
+                    {config.itemInfo?.subtitle && (
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+                        <span style={{ color: '#64748b' }}>Valor da Locação:</span>
+                        <span style={{ fontWeight: 800, color: '#0000ff' }}>{config.itemInfo.subtitle}</span>
+                      </div>
+                    )}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+                      <span style={{ color: '#64748b' }}>Status da Reserva:</span>
+                      <span style={{ fontWeight: 800, color: '#10b981', display: 'flex', alignItems: 'center', gap: 4 }}>
+                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981' }} />
+                        Aprovado
+                      </span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+                      <span style={{ color: '#64748b' }}>Previsão de Retirada:</span>
+                      <span style={{ fontWeight: 700, color: '#0f172a' }}>Em até 24h</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Botão de Conclusão com design premium */}
                 <button
                   type="button"
                   onClick={closeProcessing}
                   style={{
                     width: '100%',
-                    background: '#0000ff',
+                    background: 'linear-gradient(135deg, #0000ff 0%, #1d4ed8 100%)',
                     color: '#ffffff',
                     border: 'none',
-                    borderRadius: 12,
-                    padding: '13px',
-                    fontSize: 14,
+                    borderRadius: 14,
+                    padding: '14px',
+                    fontSize: 15,
                     fontWeight: 800,
                     cursor: 'pointer',
-                    boxShadow: '0 4px 14px rgba(0, 0, 255, 0.3)',
-                    transition: 'all 0.2s'
+                    boxShadow: '0 6px 20px rgba(0, 0, 255, 0.3)',
+                    transition: 'transform 0.15s ease'
                   }}
+                  onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.98)'}
+                  onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
                 >
                   Concluir
                 </button>
-              </div>
-            ) : (
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, color: '#64748b', fontSize: 12, fontWeight: 500 }}>
-                <span className="global-pulse" style={{ width: 8, height: 8, borderRadius: '50%', background: '#0000ff', display: 'inline-block' }} />
-                <span>Processando em tempo real...</span>
               </div>
             )}
           </div>
