@@ -86,7 +86,7 @@ export default function Meu() {
     <div className="meu-page-wrapper">
       <style>{`
         .meu-page-wrapper {
-          background: #f0f2f5;
+          background: transparent;
           min-height: 100vh;
           padding-bottom: 72px;
           width: 100%;
@@ -156,6 +156,8 @@ export default function Meu() {
               alignItems: 'center',
               gap: 14,
               boxShadow: '0 4px 14px rgba(0,0,0,0.08)',
+              marginLeft: 4,
+              marginRight: 4,
             }}>
               <div style={{
                 width: 56, height: 56,
@@ -178,7 +180,7 @@ export default function Meu() {
                 <div style={{ fontSize: 12, color: '#888', marginTop: 3 }}>ID: 244926695136</div>
               </div>
 
-              <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 6, color: '#1a3c7a' }} aria-label="Sair">
+              <button style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 6, color: '#1a3c7a', borderRadius: 22, marginLeft: 4, marginRight: 4 }} aria-label="Sair">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                   <polyline points="16 17 21 12 16 7" />
@@ -193,6 +195,8 @@ export default function Meu() {
               overflow: 'hidden',
               border: '1px solid #e0e8f4',
               boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+              marginLeft: 4,
+              marginRight: 4,
             }}>
               {balances.map((item, i) => (
                 <div
@@ -212,7 +216,7 @@ export default function Meu() {
                     </span>
                     <button
                       onClick={() => setHideValues(h => !h)}
-                      style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2, lineHeight: 1 }}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 2, lineHeight: 1, borderRadius: 22, marginLeft: 4, marginRight: 4 }}
                       aria-label="ocultar/mostrar valor"
                     >
                       <IcEye hidden={hideValues} />
@@ -230,6 +234,8 @@ export default function Meu() {
               borderRadius: 12,
               overflow: 'hidden',
               boxShadow: '0 2px 10px rgba(0,0,0,0.06)',
+              marginLeft: 4,
+              marginRight: 4,
             }}>
               {menuItems.map(({ Icon, label }, i) => (
                 <button
@@ -251,6 +257,9 @@ export default function Meu() {
                     cursor: 'pointer',
                     borderBottom: i < menuItems.length - 1 ? '1px solid #f0f0f0' : 'none',
                     textAlign: 'left',
+                    borderRadius: 22,
+                    marginLeft: 4,
+                    marginRight: 4,
                   }}
                 >
                   <div style={{ width: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>

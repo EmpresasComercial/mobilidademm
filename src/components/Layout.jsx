@@ -10,7 +10,7 @@ export default function Layout({ children }) {
   const isHome = location.pathname === '/';
 
   return (
-    <div style={{ minHeight: '100vh', background: '#fff', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100vh', background: 'transparent', display: 'flex', flexDirection: 'column' }}>
 
 
       {/* ===== MENU PRODUCTS OVERLAY ===== */}
@@ -191,8 +191,8 @@ export default function Layout({ children }) {
       {/* ===== BOTTOM TAB BAR MOBILE ===== */}
       <div className="mobile-app-tabbar">
         <Link
-          to="/"
-          className={`app-tab-item ${location.pathname === '/' ? 'active' : ''}`}
+          to="/home"
+          className={`app-tab-item ${location.pathname === '/home' || location.pathname === '/' ? 'active' : ''}`}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
           <Home size={22} />

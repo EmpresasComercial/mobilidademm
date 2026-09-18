@@ -31,7 +31,7 @@ export default function Recarregar() {
   };
 
   return (
-    <div style={{ background: '#f5f7fa', minHeight: '100vh', paddingBottom: 80 }}>
+    <div style={{ background: 'transparent', minHeight: '100vh', paddingBottom: 80 }}>
       <div style={{ background: '#fff', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 16, borderBottom: '1px solid #e0e8f4', position: 'sticky', top: 0, zIndex: 10 }}>
         <button onClick={() => step === 2 ? setStep(1) : navigate(-1)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, display: 'flex' }}>
           <ArrowLeft size={24} color="#333" />
@@ -39,24 +39,24 @@ export default function Recarregar() {
         <h1 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: '#333' }}>Pay Now</h1>
       </div>
 
-      <div className="container" style={{ padding: '24px 16px' }}>
+      <div className="container" style={{ padding: '24px 16px', marginLeft: 4, marginRight: 4 }}>
 
         {/* STEP 1 — inserir valor */}
         {step === 1 && (
-          <div style={{ background: '#fff', borderRadius: 12, padding: 24, boxShadow: '0 2px 8px rgba(0,0,0,0.04)' }}>
+          <div style={{ marginLeft: 4, marginRight: 4, padding: '10px 0' }}>
             <h2 style={{ fontSize: 16, fontWeight: 600, color: '#333', marginBottom: 16 }}>Qual valor deseja recarregar?</h2>
             <form onSubmit={(e) => { e.preventDefault(); if (canNext) setStep(2); }}>
               <div style={{ position: 'relative', marginBottom: 24 }}>
                 <span style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', color: '#666', fontSize: 16, fontWeight: 500 }}>Kz</span>
                 <input
                   type="number" value={valor} onChange={(e) => setValor(e.target.value)}
-                  placeholder="0.00" step="0.01" min="1" required
-                  style={{ width: '100%', padding: '16px 16px 16px 48px', fontSize: 20, fontWeight: 600, border: '1px solid #dce4f2', borderRadius: 8, outline: 'none', color: '#333', boxSizing: 'border-box' }}
+                  placeholder="Por favor digite o valor" step="0.01" min="1" required
+                  style={{ width: '100%', padding: '16px 16px 16px 48px', fontSize: 20, fontWeight: 600, border: '1px solid #dce4f2', borderRadius: 22, outline: 'none', color: '#333', boxSizing: 'border-box', marginLeft: 4, marginRight: 4 }}
                 />
               </div>
               <button
                 type="submit" disabled={!canNext}
-                style={{ width: '100%', background: canNext ? '#0000ff' : '#c9d2e3', color: '#fff', border: 'none', padding: '16px', borderRadius: 8, fontSize: 16, fontWeight: 700, cursor: canNext ? 'pointer' : 'not-allowed', transition: 'background 0.3s' }}
+                style={{ width: '100%', background: canNext ? '#0000ff' : '#c9d2e3', color: '#fff', border: 'none', padding: '16px', borderRadius: 22, fontSize: 16, fontWeight: 700, cursor: canNext ? 'pointer' : 'not-allowed', transition: 'background 0.3s', marginLeft: 4, marginRight: 4 }}
               >
                 Continuar
               </button>
@@ -66,7 +66,7 @@ export default function Recarregar() {
 
         {/* STEP 2 — selecionar banco */}
         {step === 2 && (
-          <div>
+          <div style={{ marginLeft: 4, marginRight: 4 }}>
             <h2 style={{ fontSize: 16, fontWeight: 400, color: '#333', marginBottom: 16 }}>Selecione um banco para transferência</h2>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -81,6 +81,7 @@ export default function Recarregar() {
                       boxShadow: isOpen ? '0 4px 16px rgba(0,0,255,0.10)' : '0 2px 8px rgba(0,0,0,0.04)',
                       border: isOpen ? '1px solid #a5b4fc' : '1px solid #e0e8f4',
                       transition: 'border 0.25s, box-shadow 0.25s',
+                      marginLeft: 4, marginRight: 4,
                     }}
                   >
                     {/* Cabeçalho do card */}
@@ -93,7 +94,7 @@ export default function Recarregar() {
 
                     {/* Estado bloqueado */}
                     {!isOpen && (
-                      <div style={{ marginTop: 10, background: 'rgba(245,247,250,0.85)', borderRadius: 8, padding: '12px 14px', border: '1px dashed #d1d5db', display: 'flex', alignItems: 'center', gap: 10, color: '#9ca3af', fontSize: 13 }}>
+                      <div style={{ marginTop: 10, background: 'rgba(245,247,250,0.85)', borderRadius: 8, padding: '12px 14px', border: '1px dashed #d1d5db', display: 'flex', alignItems: 'center', gap: 10, color: '#9ca3af', fontSize: 13, marginLeft: 4, marginRight: 4 }}>
                         <Lock size={15} color="#c4c4c4" />
                         <span>Toque para ver os dados bancários</span>
                       </div>
@@ -103,7 +104,7 @@ export default function Recarregar() {
                     {isOpen && (
                       <div style={{ animation: 'fadeIn 0.2s ease' }}>
                         {/* Valor */}
-                        <div style={{ background: 'linear-gradient(135deg, #1a3c7a 0%, #0000ff 100%)', borderRadius: 8, padding: '10px 14px', marginBottom: 14, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div style={{ background: 'linear-gradient(135deg, #1a3c7a 0%, #0000ff 100%)', borderRadius: 8, padding: '10px 14px', marginBottom: 14, display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginLeft: 4, marginRight: 4 }}>
                           <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.8)' }}>Valor a transferir</span>
                           <span style={{ fontSize: 18, fontWeight: 800, color: '#fff' }}>Kz {numValor.toLocaleString('pt-AO', { minimumFractionDigits: 2 })}</span>
                         </div>
@@ -121,7 +122,7 @@ export default function Recarregar() {
                             <span style={{ fontSize: 13, color: '#1e3a8a', fontFamily: 'monospace', letterSpacing: '0.5px', fontWeight: 600 }}>{banco.iban}</span>
                             <button
                               onClick={(e) => copy(e, banco.iban)}
-                              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, display: 'flex', color: copiedIban === banco.iban ? '#10b981' : '#0000ff', flexShrink: 0 }}
+                              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, display: 'flex', color: copiedIban === banco.iban ? '#10b981' : '#0000ff', flexShrink: 0, borderRadius: 22, marginLeft: 4, marginRight: 4 }}
                               title="Copiar IBAN"
                             >
                               {copiedIban === banco.iban ? <CheckCircle2 size={18} /> : <Copy size={18} />}

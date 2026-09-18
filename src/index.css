@@ -26,20 +26,103 @@
   margin: 0;
   padding: 0;
   -webkit-tap-highlight-color: transparent;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE e Edge */
+  font-weight: 400 !important;
+}
+
+b, strong, h1, h2, h3, h4, h5, h6, label, button, input, select, textarea, span, p, a, div {
+  font-weight: 400 !important;
+}
+
+*::-webkit-scrollbar,
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari e Opera */
+  width: 0 !important;
+  height: 0 !important;
 }
 
 body {
   font-family: var(--font-family);
-  background-color: #ffffff;
+  background-color: #f0f4fa;
+  background-image: url('https://lmmobilidade.com.br/wp-content/uploads/2024/03/mapa-mobilidade-1-1-490x490.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain;
+  background-attachment: fixed;
   color: var(--dark);
   line-height: 1.5;
   min-height: 100vh;
   width: 100%;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 #root {
   width: 100%;
   min-height: 100vh;
+}
+
+/* =========================================================
+   REGRAS GLOBAIS DE DESIGN SYSTEM:
+   1. Exclusivamente para campos (input/select/textarea) e botões (button, .button, [data-button], .btn): border-radius: 22px !important;
+   2. Elementos de página, containers, cards, campos e botões: margem de 4px à esquerda e à direita.
+   ========================================================= */
+
+input,
+select,
+textarea,
+button,
+.button,
+[data-button],
+.btn,
+.btn-primary,
+.btn-outline,
+.car-btn-alugar,
+.eq-copy-btn,
+.header-btn,
+.portal-pill {
+  border-radius: 22px !important;
+}
+
+/* Evita deformação de autofill em navegadores */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #111827 !important;
+  border-radius: 22px !important;
+}
+
+/* Margem de 4px à esquerda e à direita para botões, cards, containers, form-groups e seções */
+button,
+.button,
+[data-button],
+.btn,
+.container,
+.card,
+.diff-card,
+.eq-card,
+.eq-nivel-card,
+.car-card-list,
+.product-pill-card,
+.benefit-row,
+.map-card,
+.faq-item,
+.contact-card,
+.inclusion-card,
+.security-alert,
+.text-item-normal,
+.meu-container,
+.meu-grid,
+.aluguel-container,
+.app-section,
+.form-group,
+section {
+  margin-left: 4px !important;
+  margin-right: 4px !important;
 }
 
 /* App Container */

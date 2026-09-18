@@ -6,7 +6,7 @@ export default function Equipe() {
   const [copiedLink, setCopiedLink] = useState(false);
 
   const inviteCode = 'LM89420';
-  const inviteLink = `https://lmmobilidade.com/registro?convite=${inviteCode}`;
+  const inviteLink = `https://lmmobilidade.com/registro?br=${inviteCode}`;
 
   const copyToClipboard = (text, type) => {
     navigator.clipboard.writeText(text);
@@ -66,7 +66,7 @@ export default function Equipe() {
         .eq-nivel-card:active { transform: scale(0.98); }
       `}</style>
 
-      <div style={{ background: 'linear-gradient(180deg, #f0f4ff 0%, #f8fafc 100%)', minHeight: '100vh', paddingBottom: 90, fontFamily: "'Inter', sans-serif" }}>
+      <div style={{ background: 'transparent', minHeight: '100vh', paddingBottom: 90, fontFamily: "'Inter', sans-serif" }}>
 
         {/* ── HERO ── */}
         <div style={{
@@ -135,7 +135,7 @@ export default function Equipe() {
                 style={{
                   background: copiedCode ? '#10b981' : '#0000ff',
                   border: 'none',
-                  borderRadius: 10,
+                  borderRadius: 22,
                   cursor: 'pointer',
                   padding: '9px 15px',
                   display: 'flex',
@@ -146,7 +146,9 @@ export default function Equipe() {
                   fontWeight: 700,
                   boxShadow: copiedCode ? '0 4px 12px rgba(16,185,129,0.3)' : '0 4px 12px rgba(0,0,255,0.3)',
                   transition: 'all 0.2s ease',
-                  flexShrink: 0
+                  flexShrink: 0,
+                  marginLeft: 4,
+                  marginRight: 4,
                 }}
               >
                 {copiedCode ? (
@@ -172,7 +174,9 @@ export default function Equipe() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              gap: 10
+              gap: 10,
+              marginLeft: 4,
+              marginRight: 4,
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, overflow: 'hidden', flex: 1 }}>
                 <Link2 size={16} color="#0000ff" style={{ flexShrink: 0 }} />
@@ -187,7 +191,7 @@ export default function Equipe() {
                 style={{
                   background: copiedLink ? '#10b981' : '#0000ff',
                   border: 'none',
-                  borderRadius: 8,
+                  borderRadius: 22,
                   cursor: 'pointer',
                   padding: '7px 12px',
                   display: 'flex',
@@ -198,7 +202,9 @@ export default function Equipe() {
                   fontWeight: 700,
                   flexShrink: 0,
                   boxShadow: copiedLink ? '0 2px 8px rgba(16,185,129,0.25)' : '0 2px 8px rgba(0,0,255,0.25)',
-                  transition: 'all 0.2s ease'
+                  transition: 'all 0.2s ease',
+                  marginLeft: 4,
+                  marginRight: 4,
                 }}
               >
                 {copiedLink ? (

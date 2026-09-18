@@ -8,6 +8,23 @@ html, body {
   width: 100%;
   -webkit-font-smoothing: antialiased;
   scroll-behavior: smooth;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  font-weight: 400 !important;
+}
+
+* {
+  font-weight: 400 !important;
+}
+
+svg {
+  flex-shrink: 0;
+}
+
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 img, svg, picture {

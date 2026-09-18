@@ -66,7 +66,7 @@ export default function Retirar() {
   const valorInvalido = numValor < 1000 && numValor > 0;
 
   return (
-    <div style={{ background: '#f5f7fa', minHeight: '100vh', paddingBottom: 80, fontFamily: 'sans-serif' }}>
+    <div style={{ background: 'transparent', minHeight: '100vh', paddingBottom: 80, fontFamily: 'sans-serif' }}>
       {/* HEADER */}
       <div
         style={{
@@ -111,7 +111,9 @@ export default function Retirar() {
               padding: '32px 20px',
               textAlign: 'center',
               boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
-              border: '1px solid #e0e8f4'
+              border: '1px solid #e0e8f4',
+              marginLeft: 4,
+              marginRight: 4,
             }}
           >
             <div style={{ display: 'inline-flex', padding: 16, borderRadius: '50%', background: '#ecfdf5', marginBottom: 16 }}>
@@ -125,7 +127,7 @@ export default function Retirar() {
               O seu pedido de retirada foi registrado com sucesso.
             </p>
 
-            <div style={{ background: '#f9fafb', borderRadius: 8, padding: 16, textAlign: 'left', marginBottom: 24, border: '1px solid #e5e7eb' }}>
+            <div style={{ background: '#f9fafb', borderRadius: 8, padding: 16, textAlign: 'left', marginBottom: 24, border: '1px solid #e5e7eb', marginLeft: 4, marginRight: 4 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
                 <span style={{ fontSize: 13, color: '#6b7280' }}>Protocolo:</span>
                 <span style={{ fontSize: 13, fontWeight: 700, color: '#1f2937', fontFamily: 'monospace' }}>{protocolo}</span>
@@ -146,10 +148,12 @@ export default function Retirar() {
                 color: '#fff',
                 border: 'none',
                 padding: '14px',
-                borderRadius: 0,
+                borderRadius: 22,
                 fontSize: 15,
                 fontWeight: 700,
-                cursor: 'pointer'
+                cursor: 'pointer',
+                marginLeft: 4,
+                marginRight: 4,
               }}
             >
               Voltar ao Meu Perfil
@@ -169,7 +173,9 @@ export default function Retirar() {
                 boxShadow: '0 4px 12px rgba(0,0,255,0.15)',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
+                marginLeft: 4,
+                marginRight: 4,
               }}
             >
               <div>
@@ -189,10 +195,12 @@ export default function Retirar() {
                   border: '1px solid rgba(255,255,255,0.4)',
                   color: '#fff',
                   padding: '8px 14px',
-                  borderRadius: 6,
+                  borderRadius: 22,
                   fontSize: 12,
                   fontWeight: 700,
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  marginLeft: 4,
+                  marginRight: 4,
                 }}
               >
                 Retirar tudo
@@ -203,12 +211,9 @@ export default function Retirar() {
               {/* 2. INPUT DE VALOR */}
               <div
                 style={{
-                  background: '#fff',
-                  borderRadius: 12,
-                  padding: '20px',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-                  border: '1px solid #e0e8f4',
-                  marginBottom: 16
+                  marginBottom: 16,
+                  marginLeft: 4,
+                  marginRight: 4,
                 }}
               >
                 <label style={{ display: 'block', fontSize: 13, fontWeight: 700, color: '#374151', marginBottom: 8 }}>
@@ -232,7 +237,7 @@ export default function Retirar() {
                     type="number"
                     step="0.01"
                     min="1"
-                    placeholder="0.00"
+                    placeholder="Por favor digite o valor"
                     value={valor}
                     onChange={(e) => setValor(e.target.value)}
                     required
@@ -243,9 +248,11 @@ export default function Retirar() {
                       fontSize: 18,
                       fontWeight: 700,
                       border: saldoInsuficiente ? '1px solid #ef4444' : '1px solid #d1d5db',
-                      borderRadius: 8,
+                      borderRadius: 22,
                       outline: 'none',
-                      color: '#111827'
+                      color: '#111827',
+                      marginLeft: 4,
+                      marginRight: 4,
                     }}
                   />
                 </div>
@@ -271,12 +278,14 @@ export default function Retirar() {
                   color: '#fff',
                   border: 'none',
                   padding: '16px',
-                  borderRadius: 0,
+                  borderRadius: 22,
                   fontSize: 16,
                   fontWeight: 700,
                   cursor: (!valor || numValor <= 0 || saldoInsuficiente) ? 'not-allowed' : 'pointer',
                   transition: 'background 0.2s ease',
-                  marginBottom: 20
+                  marginBottom: 20,
+                  marginLeft: 4,
+                  marginRight: 4,
                 }}
               >
                 Confirmar Retirada
@@ -288,7 +297,9 @@ export default function Retirar() {
                   background: '#eff6ff',
                   borderRadius: 10,
                   padding: '14px 16px',
-                  border: '1px solid #dbeafe'
+                  border: '1px solid #dbeafe',
+                  marginLeft: 4,
+                  marginRight: 4,
                 }}
               >
                 <div style={{ fontSize: 13, fontWeight: 700, color: '#1e40af', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>

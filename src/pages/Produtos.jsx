@@ -107,7 +107,7 @@ export default function Produtos() {
     <div className="aluguel-page">
       <style>{`
         .aluguel-page {
-          background: #ffffff;
+          background: transparent;
           min-height: 100vh;
           padding-bottom: 90px;
           width: 100%;
@@ -155,6 +155,8 @@ export default function Produtos() {
           flex-direction: row;
           align-items: stretch;
           transition: transform 0.2s, box-shadow 0.2s;
+          margin-left: 4px;
+          margin-right: 4px;
         }
         .car-card-list:hover {
           transform: translateY(-2px);
@@ -238,7 +240,7 @@ export default function Produtos() {
           color: #ffffff;
           border: none;
           padding: 10px 18px;
-          border-radius: 24px;
+          border-radius: 22px !important;
           font-size: 13px;
           font-weight: 800;
           cursor: pointer;
@@ -249,6 +251,8 @@ export default function Produtos() {
           width: fit-content;
           box-shadow: 0 4px 12px rgba(0, 0, 255, 0.25);
           transition: background 0.2s, transform 0.1s;
+          margin-left: 4px;
+          margin-right: 4px;
         }
         .car-btn-alugar:hover {
           background: #0000cc;
